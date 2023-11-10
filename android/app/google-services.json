@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "4338278854",
+    "project_id": "lookup-app-3271c",
+    "storage_bucket": "lookup-app-3271c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4338278854:android:0a544b294665ffd34752c7",
+        "android_client_info": {
+          "package_name": "com.example.lookup_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4338278854-tggoo16hchha5el3hv8s18tma2v90stv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lookup_app",
+            "certificate_hash": "9b386a7e2d59204750fc885f06b4731dbfda40d0"
+          }
+        },
+        {
+          "client_id": "4338278854-31vqvdcie2tbmhjlc539hvksik5f1n0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbzMCQlUogAo7-mUAPXybiDdnNjU_d_ts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4338278854-31vqvdcie2tbmhjlc539hvksik5f1n0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
