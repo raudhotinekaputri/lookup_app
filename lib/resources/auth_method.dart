@@ -101,35 +101,32 @@ class AuthMethods {
   Future<Object> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-      if (gUser != null) {
-        final GoogleSignInAuthentication gAuth = await gUser.authentication;
-        final credential = GoogleAuthProvider.credential(
-          accessToken: gAuth.accessToken,
-          idToken: gAuth.idToken,
-        );
-        final UserCredential userCredential =
-            await _auth.signInWithCredential(credential);
 
-        // Dapatkan UID dari pengguna yang berhasil login
-        String uid = userCredential.user!.uid;
-        print('UID pengguna yang login: $uid');
+      final GoogleSignInAuthentication? gAuth = await gUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth!.accessToken,
+        idToken: gAuth.idToken,
+      );
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
 
-        String userName = gUser.displayName ?? 'No name';
-        String userPhoto = gUser.photoUrl ?? 'No photo';
-        String email = gUser.email;
+      // Dapatkan UID dari pengguna yang berhasil login
+      String uid = userCredential.user!.uid;
+      print('UID pengguna yang login: $uid');
 
-        // Gunakan informasi email sesuai kebutuhan
-        print('Email pengguna: $email');
+      String userName = gUser!.displayName ?? 'No name';
+      String userPhoto = gUser.photoUrl ?? 'No photo';
+      String email = gUser.email;
 
-        // Gunakan informasi nama pengguna dan URL foto sesuai kebutuhan
-        print('Nama pengguna: $userName');
-        print('URL foto: $userPhoto');
-        storeUserData(uid, userName, userPhoto, email);
+      // Gunakan informasi email sesuai kebutuhan
+      print('Email pengguna: $email');
 
-        return userCredential;
-      } else {
-        return 'Google sign in canceled';
-      }
+      // Gunakan informasi nama pengguna dan URL foto sesuai kebutuhan
+      print('Nama pengguna: $userName');
+      print('URL foto: $userPhoto');
+      storeUserData(uid, userName, userPhoto, email);
+
+      return userCredential;
     } catch (err) {
       return err.toString();
     }
