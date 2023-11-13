@@ -2,8 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/screens/signup_screen.dart';
-import 'package:lookup_app/ui/homecard.dart';
-import 'package:lookup_app/ui/sidebar.dart';
 import 'package:lookup_app/utils/colors.dart';
 import 'package:lookup_app/ui/homecard.dart';
 
@@ -37,25 +35,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home: HomeCard(),
-    );
-    
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My App'),
-      ),
-      body: Center(
-        child: const Text('Halaman Utama'),
-      ),
-      drawer: Sidebar(), // Sidebar sebagai drawer
+      // home: const ResponsiveLayout(
+      // mobileScreenLayout: MobileScreenLayout(),
+      //  webScreenLayout: WebScreenLayout(),
+      // ),
+      home: const SignupScreen(),
     );
   }
 }
