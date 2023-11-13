@@ -101,8 +101,8 @@ class AuthMethods {
   Future<Object> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-      
-        final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+      if (gUser != null) {
+        final GoogleSignInAuthentication gAuth = await gUser.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: gAuth.accessToken,
           idToken: gAuth.idToken,
@@ -110,24 +110,26 @@ class AuthMethods {
         final UserCredential userCredential =
             await _auth.signInWithCredential(credential);
 
-        // Dapatkan UID dari pengguna yang berhasil login
-        String uid = userCredential.user!.uid;
-        print('UID pengguna yang login: $uid');
+      // Dapatkan UID dari pengguna yang berhasil login
+      String uid = userCredential.user!.uid;
+      print('UID pengguna yang login: $uid');
 
-        String userName = gUser.displayName ?? 'No name';
-        String userPhoto = gUser.photoUrl ?? 'No photo';
-        String email = gUser.email;
+      String userName = gUser!.displayName ?? 'No name';
+      String userPhoto = gUser.photoUrl ?? 'No photo';
+      String email = gUser.email;
 
-        // Gunakan informasi email sesuai kebutuhan
-        print('Email pengguna: $email');
+      // Gunakan informasi email sesuai kebutuhan
+      print('Email pengguna: $email');
 
-        // Gunakan informasi nama pengguna dan URL foto sesuai kebutuhan
-        print('Nama pengguna: $userName');
-        print('URL foto: $userPhoto');
-        storeUserData(uid, userName, userPhoto, email);
+      // Gunakan informasi nama pengguna dan URL foto sesuai kebutuhan
+      print('Nama pengguna: $userName');
+      print('URL foto: $userPhoto');
+      storeUserData(uid, userName, userPhoto, email);
 
         return userCredential;
-
+      } else {
+        return 'Google sign in canceled';
+      }
     } catch (err) {
       return err.toString();
     }
