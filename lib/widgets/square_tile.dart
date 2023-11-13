@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/responsive/mobile_screen_layout.dart';
 
 class SquareTile extends StatelessWidget {
@@ -20,12 +19,14 @@ class SquareTile extends StatelessWidget {
             await onPressed!(); // Tambah await dan panggil onPressed sebagai fungsi
         if (result is UserCredential) {
           // Jika berhasil login dengan Google, arahkan ke halaman MobileScreenLayout
+          // ignore: use_build_context_synchronously
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const MobileScreenLayout(),
           ));
         } else {
           // Tambahkan penanganan kesalahan jika login gagal
           // Contoh:
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Failed to sign in with Google')),
           );

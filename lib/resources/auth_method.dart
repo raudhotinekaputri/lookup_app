@@ -101,8 +101,8 @@ class AuthMethods {
   Future<Object> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-      if (gUser != null) {
-        final GoogleSignInAuthentication gAuth = await gUser.authentication;
+      
+        final GoogleSignInAuthentication gAuth = await gUser!.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: gAuth.accessToken,
           idToken: gAuth.idToken,
@@ -127,9 +127,7 @@ class AuthMethods {
         storeUserData(uid, userName, userPhoto, email);
 
         return userCredential;
-      } else {
-        return 'Google sign in canceled';
-      }
+
     } catch (err) {
       return err.toString();
     }
