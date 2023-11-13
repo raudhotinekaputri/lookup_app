@@ -13,7 +13,8 @@ class GoogleLogo extends StatelessWidget {
         color: Colors.white, // Warna latar belakang lingkaran
       ),
       child: Center(
-        child: Image.asset('google.png'), // Ganti dengan path gambar Anda
+        child:
+            Image.asset('assets/google.png'), // Ganti dengan path gambar Anda
       ),
     );
   }
