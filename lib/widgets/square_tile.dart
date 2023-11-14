@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/responsive/mobile_screen_layout.dart';
+import 'package:lookup_app/screen/ThePage.dart';
+import 'package:lookup_app/ui/homecard.dart';
+import 'package:lookup_app/ui/navtop.dart';
 
 class SquareTile extends StatelessWidget {
   final String imagePath;
@@ -19,9 +22,9 @@ class SquareTile extends StatelessWidget {
             await onPressed!(); // Tambah await dan panggil onPressed sebagai fungsi
         if (result is UserCredential) {
           // Jika berhasil login dengan Google, arahkan ke halaman MobileScreenLayout
-          // ignore: use_build_context_synchronously
+
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const MobileScreenLayout(),
+            builder: (context) => ThePage(),
           ));
         } else {
           // Tambahkan penanganan kesalahan jika login gagal
@@ -33,15 +36,15 @@ class SquareTile extends StatelessWidget {
         }
       },
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(100),
           color: Colors.grey[200],
         ),
         child: Image.asset(
           imagePath,
-          height: 40,
+          height: 20,
         ),
       ),
     );
