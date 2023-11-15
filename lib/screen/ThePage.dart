@@ -23,7 +23,7 @@ class ThePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    child: CardContainer(jenis:"ditemukan", judul:"lorem", akun:"@syifa", status:"belom selesai",),
+                    child: CardContainer(jenis:"ditemukan", judul:"lorem", akun:"@syifa", status:"belom selesai", gambar: 'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png',),
                   );
                 },
               ),

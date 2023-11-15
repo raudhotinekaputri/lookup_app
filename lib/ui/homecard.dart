@@ -16,7 +16,7 @@ class HomeCard extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    child: CardContainer(jenis: 'ditemukan', judul: "lorem", akun: '@syifa', status: 'belum ditemukan',),
+                    child: CardContainer(jenis: 'ditemukan', judul: "lorem", akun: '@syifa', status: 'belum ditemukan', gambar: 'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png'),
                   );
                 },
               ),
@@ -40,6 +40,7 @@ class CardContainer extends StatelessWidget {
   final String judul;
   final String akun;
   final String status;
+  final String gambar;
 
   CardContainer({
     Key? key,
@@ -47,6 +48,7 @@ class CardContainer extends StatelessWidget {
     required this.judul,
     required this.akun,
     required this.status,
+    required this.gambar,
   }) : super(key: key);
 
   @override
@@ -84,8 +86,8 @@ class CardContainer extends StatelessWidget {
                       ),
                     ),
                     Center(
-                      child: Image.asset(
-                        'assets/google.png', // Ganti dengan path gambar Anda
+                      child: Image.network(
+                        gambar, // Ganti dengan path gambar Anda
                         width: 100, // Sesuaikan lebar gambar
                         height: 100, // Sesuaikan tinggi gambar
                         fit: BoxFit.contain,
