@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/ui/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Sidebar extends StatelessWidget {
+  // final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // User? user = FirebaseAuth.instance.currentUser;
+  // final uid = FirebaseAuth.instance.currentUser!.uid;
+
+  // final userDocRef = firestore.collection('users').doc(uid);
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -14,23 +21,43 @@ class Sidebar extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF586CA6),
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ),
+            // UserAccountsDrawerHeader(
+            //   decoration: BoxDecoration(
+            //     color:  Color(0xFF586CA6),
+            //   ),
+            //   accountName: Text(
+                
+            //     user.displayName ?? '',
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            //   accountEmail: null,
+            //   currentAccountPicture: CircleAvatar(
+            //     backgroundImage: NetworkImage(
+            //       user.photoURL ?? '',
+            //     ),
+            //   ),
+            //   onDetailsPressed: () {
+            //     //lorem
+            //   },
+            // ),
+            // DrawerHeader(
+            //   decoration: BoxDecoration(
+            //     color: Color(0xFF586CA6),
+            //   ),
+            //   child: Align(
+            //     alignment: Alignment.centerLeft,
+            //     child: IconButton(
+            //       icon: Icon(
+            //         Icons.arrow_back,
+            //         color: Colors.white,
+            //       ),
+            //       onPressed: () {
+            //         Navigator.pop(context);
+            //       },
+            //     ),
+            //   ),
+            // ),
+            SizedBox(height: 16),
             ListTile(
               leading: Icon(Icons.home, color: Colors.white),
               title: Text('Home', style: TextStyle(color: Colors.white)),

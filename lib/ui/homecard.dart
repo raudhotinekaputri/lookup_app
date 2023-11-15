@@ -3,6 +3,7 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
+
 class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
