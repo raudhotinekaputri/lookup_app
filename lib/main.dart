@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/screens/signup_screen.dart';
+import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/signup_page.dart';
+import 'package:lookup_app/ui/splash_screen.dart';
 import 'package:lookup_app/utils/colors.dart';
 import 'package:lookup_app/ui/homecard.dart';
 
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
       // mobileScreenLayout: MobileScreenLayout(),
       //  webScreenLayout: WebScreenLayout(),
       // ),
-      home: HomeCard(),
+      home: const SignUpPage(),
     );
   }
 }
