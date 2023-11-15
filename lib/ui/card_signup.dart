@@ -20,6 +20,8 @@ class _CardSignUpState extends State<CardSignUp> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
+  bool _isPass = true;
 
   void _navigateToLoginPage() {
     Navigator.of(context).push(
@@ -49,7 +51,6 @@ class _CardSignUpState extends State<CardSignUp> {
             children: <Widget>[
               Row(
                 children: [
-                  // Tambahkan SizedBox untuk memberi jarak
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -64,78 +65,71 @@ class _CardSignUpState extends State<CardSignUp> {
                       ),
                       Text('Buat akun untuk melanjutkan'),
                       SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GoogleLogo(),
-                ],
-              ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          GoogleLogo(),
+                        ],
+                      ),
                     ],
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Nama pengguna',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.person, color: Colors.black),
-                ),
-                style: TextStyle(color: Colors.black, fontFamily: 'Poppins'),
-                controller: _usernameController,
+              TextFieldInput(
+                textEditingController: _usernameController,
+                hintText: 'Nama pengguna',
+                textInputType: TextInputType.text,
               ),
               const SizedBox(height: 24),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Alamat email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.email, color: Colors.black),
-                ),
-                style: TextStyle(color: Colors.black, fontFamily: 'Poppins'),
-                controller: _emailController,
+              TextFieldInput(
+                textEditingController: _emailController,
+                hintText: 'Alamat email',
+                textInputType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 24),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Kata sandi',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.lock, color: Colors.black),
-                ),
-                obscureText: true,
-                style: TextStyle(color: Colors.black, fontFamily: 'Poppins'),
-                controller: _passwordController,
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Konfirmasi Kata Sandi',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.lock, color: Colors.black),
-                ),
-                obscureText: true,
-                style: TextStyle(color: Colors.black, fontFamily: 'Poppins'),
-                controller: _confirmPasswordController,
-              ),
+              // ...
+TextFieldInput(
+  textEditingController: _passwordController,
+  hintText: 'Kata sandi',
+  textInputType: TextInputType.text,
+  isPass: _isPass,
+  suffixIcon: IconButton(
+    icon: Icon(
+      _isPass
+          ? Icons.visibility_off
+          : Icons.visibility,
+      color: Colors.black,
+    ),
+    onPressed: () {
+      setState(() {
+        _isPass = !_isPass;
+      });
+    },
+  ),
+),
+const SizedBox(height: 24),
+TextFieldInput(
+  textEditingController: _confirmPasswordController,
+  hintText: 'Konfirmasi Kata Sandi',
+  textInputType: TextInputType.text,
+  isPass: _isPass,
+  suffixIcon: IconButton(
+    icon: Icon(
+      _isPass
+          ? Icons.visibility_off
+          : Icons.visibility,
+      color: Colors.black,
+    ),
+    onPressed: () {
+      setState(() {
+        _isPass = !_isPass;
+      });
+    },
+  ),
+),
+// ...
+
               const SizedBox(height: 24),
               InkWell(
                 onTap: _signUp,

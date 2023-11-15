@@ -5,14 +5,16 @@ class TextFieldInput extends StatelessWidget {
   final bool isPass;
   final String hintText;
   final TextInputType textInputType;
+  final IconButton? suffixIcon;
 
-  const TextFieldInput(
-      {Key? key,
-      required this.textEditingController,
-      this.isPass = false,
-      required this.hintText,
-      required this.textInputType})
-      : super(key: key);
+  const TextFieldInput({
+    Key? key,
+    required this.textEditingController,
+    this.isPass = false,
+    required this.hintText,
+    required this.textInputType,
+    this.suffixIcon,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +23,14 @@ class TextFieldInput extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       decoration: InputDecoration(
-          hintText: hintText,
-          border: inputBorder,
-          focusedBorder: inputBorder,
-          enabledBorder: inputBorder,
-          filled: true,
-          contentPadding: const EdgeInsets.all(8)),
+        hintText: hintText,
+        border: inputBorder,
+        focusedBorder: inputBorder,
+        enabledBorder: inputBorder,
+        filled: true,
+        contentPadding: const EdgeInsets.all(8),
+        suffixIcon: suffixIcon, // Tambahkan suffixIcon di sini
+      ),
       keyboardType: textInputType,
       obscureText: isPass,
     );
