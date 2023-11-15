@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/login_page.dart';
 import 'package:lookup_app/ui/homecard.dart';
+import 'package:lookup_app/ui/sidebar.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/navtop.dart';
+import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class HomeCard extends StatelessWidget {
@@ -128,6 +129,9 @@ class CardContainer extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Lakukan sesuatu saat tombol ditekan
+                        Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => SeeMorePage()),
+                          );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Color(0xFF8C92B6), // Ganti warna latar belakang sesuai keinginan Anda
