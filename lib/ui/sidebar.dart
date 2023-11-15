@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lookup_app/resources/auth_method.dart';
+import 'package:lookup_app/ui/login_page.dart';
 
 class Sidebar extends StatelessWidget {
   @override
@@ -7,8 +9,8 @@ class Sidebar extends StatelessWidget {
 
     return Drawer(
       child: Container(
-        width: screenWidth * 0.5, 
-        color: Color(0xFF586CA6), 
+        width: screenWidth * 0.5,
+        color: Color(0xFF586CA6),
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -53,8 +55,14 @@ class Sidebar extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.logout, color: Colors.white),
               title: Text('Logout', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
+              onTap: () async {
+                await AuthMethods().signOut();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                  (route) => false,
+                );
               },
             ),
             // Tambahkan item-menu lainnya sesuai kebutuhan
