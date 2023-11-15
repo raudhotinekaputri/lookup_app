@@ -23,7 +23,7 @@ class ThePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    child: CardContainer(),
+                    child: CardContainer(jenis:"ditemukan", judul:"lorem", akun:"@syifa", status:"belom selesai",),
                   );
                 },
               ),
