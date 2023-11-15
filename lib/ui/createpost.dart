@@ -6,7 +6,7 @@ void main() {
 }
 
 class CreatePosting extends StatelessWidget {
-  const CreatePosting ({super.key});
+  const CreatePosting({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +15,7 @@ class CreatePosting extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
-        body: ListView(children: [
-          CreatePost(),
-        ]),
+        body: SafeArea(child: ListView(children: [CreatePost()])),
       ),
     );
   }
@@ -30,10 +28,9 @@ class CreatePost extends StatefulWidget {
 
 class _CreatePostState extends State<CreatePost> {
   String _status = 'Kehilangan'; // Nilai default untuk Status
-  
+
   final _judulPostTextboxController = TextEditingController();
   final _deskripsiPostController = TextEditingController();
- 
 
   Future<void> _getImageFromGallery() async {
     final ImagePicker _picker = ImagePicker();
