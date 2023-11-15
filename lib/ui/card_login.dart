@@ -6,6 +6,7 @@ import 'package:lookup_app/responsive/web_screen_layout.dart';
 import 'package:lookup_app/screens/signup_screen.dart';
 import 'package:lookup_app/ui/comp/google_logo.dart';
 import 'package:lookup_app/utils/utils.dart';
+import 'package:lookup_app/widgets/square_tile.dart';
 import 'package:lookup_app/widgets/text_field_input.dart';
 
 class CardLogin extends StatefulWidget {
@@ -89,7 +90,10 @@ class _CardLoginState extends State<CardLogin> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  GoogleLogo(),
+                  SquareTile(
+                    imagePath: 'assets/google.png',
+                    onPressed: () => AuthMethods().signInWithGoogle(),
+                  )
                 ],
               ),
               SizedBox(height: 64),

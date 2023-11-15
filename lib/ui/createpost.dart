@@ -364,7 +364,7 @@ class _CreatePostState extends State<CreatePost> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                   ),
-                                  child: TextField(
+                                  child: TextFormField(
                                     style: const TextStyle(
                                         color: Colors
                                             .black), // Teks input pengguna
