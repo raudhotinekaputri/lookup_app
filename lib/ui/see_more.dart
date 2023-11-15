@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lookup_app/ui/createpost.dart';
+import 'package:lookup_app/ui/navbottom.dart';
+import 'package:lookup_app/ui/navtop.dart';
+import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
   const SeeMorePage({Key? key}) : super(key: key);
@@ -8,18 +12,21 @@ class SeeMorePage extends StatefulWidget {
 }
 
 class _SeeMorePageState extends State<SeeMorePage> {
-   @override
+  late Widget titleSection; 
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter layout demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter layout demo'),
-        ),
-        body: Column(
+    return Scaffold(
+      appBar: NavTop(),
+      drawer: Sidebar(),
+      bottomNavigationBar: const NavBottom(),
+      body: SafeArea(
+        child: Column(
           children: [
             titleSection,
+            imageSection,
+            profileSection,
             textSection,
+            commentButton,
           ],
         ),
       ),
@@ -33,7 +40,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
       children: [
         Icon(icon, color: color),
         Container(
-          margin: const EdgeInsets.only(top: 8),
+          margin: const EdgeInsets.only(top: 4),
           child: Text(
             label,
             style: TextStyle(
@@ -46,9 +53,10 @@ class _SeeMorePageState extends State<SeeMorePage> {
       ],
     );
   }
-
-  Widget titleSection = Container(
-    padding: const EdgeInsets.all(32),
+void initState(){
+  super.initState();
+  titleSection = Container(
+    padding: const EdgeInsets.all(16),
     child: Row(
       children: [
         Expanded(
@@ -61,6 +69,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
                   'Dicari HP hilang',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontSize: 24,
                   ),
                 ),
               ),
@@ -73,17 +82,96 @@ class _SeeMorePageState extends State<SeeMorePage> {
             ],
           ),
         ),
-        Icon(
-          Icons.star,
-          color: Colors.red[500],
+        Column(
+  mainAxisSize: MainAxisSize.min,
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CreatePost(),
+                      ),
+                    );
+      },
+      child: Icon(
+        Icons.edit,
+        color: Colors.white,
+      ),
+    ),
+    Container(
+      margin: const EdgeInsets.only(top: 4),
+    ),
+  ],
+),
+
+
+      ],
+    ),
+  );
+}
+  Widget imageSection = Container(
+    padding: const EdgeInsets.all(16),
+    child: Image.network(
+      'https://cdn1.katadata.co.id/media/images/temp/2023/01/05/GUNUNG_UNTUK_PEMULA-2023_01_05-17_39_26_3e89d633fc2e7715235860e7f62db958.png',
+      width: 600,
+      height: 240,
+      fit: BoxFit.cover,
+    ),
+  );
+
+  Widget profileSection = Container(
+    padding: const EdgeInsets.all(16),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: NetworkImage(
+                'https://example.com/path/to/your/profile/image.jpg',
+              ),
+              radius: 15,
+            ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Syifa Hadju',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        const Text('41'),
+        // Add the status dropdown
+        DropdownButton<String>(
+          value: 'Sudah Selesai', // You can set the initial value
+          onChanged: (String? newValue) {
+          },
+          items: <String>['Sudah Selesai', 'Belum Selesai']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: value == 'Sudah Selesai' ? Colors.white : Colors.white,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
       ],
     ),
   );
 
   Widget textSection = Container(
-    padding: const EdgeInsets.all(32),
+    padding: const EdgeInsets.all(16),
     child: const Text(
       'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
       'Alps. Situated 1,578 meters above sea level, it is one of the '
@@ -92,6 +180,22 @@ class _SeeMorePageState extends State<SeeMorePage> {
       'lake, which warms to 20 degrees Celsius in the summer. Activities '
       'enjoyed here include rowing, and riding the summer toboggan run.',
       softWrap: true,
+    ),
+  );
+
+  Widget commentButton = Padding(
+    padding: const EdgeInsets.only(right: 30.0),
+    child: Align(
+      alignment: Alignment.centerRight,
+      child: FloatingActionButton(
+        onPressed: () {
+          // Implement your onPressed logic here
+        },
+        foregroundColor: Colors.white,
+        backgroundColor: const Color(0xFF292929),
+        shape: CircleBorder(),
+        child: const Icon(Icons.comment),
+      ),
     ),
   );
 }
