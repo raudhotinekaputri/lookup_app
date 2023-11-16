@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/navtop.dart';
+import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
+
 
 class HomeCard extends StatelessWidget {
   @override
@@ -148,6 +150,9 @@ class CardContainer extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Lakukan sesuatu saat tombol ditekan
+                        Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => SeeMorePage()),
+                          );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Color(
