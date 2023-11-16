@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
@@ -5,24 +6,43 @@ import 'package:lookup_app/ui/sidebar.dart';
 class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 96),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 2, 
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: CardContainer(jenis: 'ditemukan', judul: "lorem", akun: '@syifa', status: 'belum ditemukan', gambar: 'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png'),
+          child: Column(
+        children: [
+          SizedBox(height: 96),
+          Expanded(
+            child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('posts').snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                },
-              ),
-            )
-          ],
-        )),
+                }
+                return ListView.builder(
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: CardContainer(
+                          jenis: 'ditemukan',
+                          judul: "lorem",
+                          akun: '@syifa',
+                          status: 'belum ditemukan',
+                          gambar:
+                              'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png'),
+                    );
+                  },
+                );
+              },
+            ),
+          )
+        ],
+      )),
       // body: SafeArea(
       //   child: Column(children: [
       //     SizedBox(height: 96),
@@ -130,7 +150,8 @@ class CardContainer extends StatelessWidget {
                         // Lakukan sesuatu saat tombol ditekan
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF8C92B6), // Ganti warna latar belakang sesuai keinginan Anda
+                        primary: Color(
+                            0xFF8C92B6), // Ganti warna latar belakang sesuai keinginan Anda
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

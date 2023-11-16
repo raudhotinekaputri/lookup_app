@@ -7,15 +7,8 @@ import 'package:uuid/uuid.dart';
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<String> uploadPost(
-      String description,
-      Uint8List file,
-      String uid,
-      String username,
-      String profImage,
-      String judul,
-      String status,
-      String deskripsi) async {
+  Future<String> uploadPost(Uint8List file, String uid, String username,
+      String judul, String status, String deskripsi) async {
     // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
     String res = "Some error occurred";
     try {
@@ -53,7 +46,6 @@ class FireStoreMethods {
             .collection('comments')
             .doc(commentId)
             .set({
-          'profilePic': profilePic,
           'name': name,
           'uid': uid,
           'text': text,
