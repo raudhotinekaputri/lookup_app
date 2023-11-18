@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
       // mobileScreenLayout: MobileScreenLayout(),
       //  webScreenLayout: WebScreenLayout(),
       // ),
-      home: CommentPost(),
+      home: CreatePosting(),
     );
   }
 }
