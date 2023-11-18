@@ -12,9 +12,26 @@ class CommentPost extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Color.fromARGB(255, 41, 41, 41),
       ),
-      home: Scaffold(
+ home: Scaffold(
         body: ListView(
           children: [
+            // TextForm untuk berkomentar
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                maxLines: 1,
+                decoration: InputDecoration(
+                  labelText: 'Tambahkan komentar',
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      // Logika untuk mengirim komentar
+                    },
+                    icon: Icon(Icons.send),
+                  ),
+                ),
+              ),
+            ),
             Comment(pengirim: "orang lain"),
             Comment(pengirim: "sendiri"),
             Comment(pengirim: "upin")
@@ -28,6 +45,7 @@ class CommentPost extends StatelessWidget {
 class Comment extends StatelessWidget {
   final String pengirim;
   const Comment({Key? key, required this.pengirim}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     if (pengirim == "orang lain") {
