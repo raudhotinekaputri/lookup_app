@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
@@ -118,8 +120,7 @@ class CardContainer extends StatelessWidget {
                     ),
                     Center(
                       child: Image.network(
-                        gambar, // Ganti dengan path gambar Anda
-                        width: 100, // Sesuaikan lebar gambar
+                        gambar, // Sesuaikan lebar gambar
                         height: 100, // Sesuaikan tinggi gambar
                         fit: BoxFit.contain,
                       ),
