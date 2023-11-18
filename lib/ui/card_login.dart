@@ -13,6 +13,7 @@ import 'package:lookup_app/utils/utils.dart';
 import 'package:lookup_app/widgets/square_tile.dart';
 import 'package:lookup_app/widgets/text_field_input.dart';
 import 'package:lookup_app/ui/homecard.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 
 class CardLogin extends StatefulWidget {
   const CardLogin({Key? key}) : super(key: key);
@@ -42,7 +43,9 @@ class _CardLoginState extends State<CardLogin> {
     if (res == 'success') {
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => ThePage()),
+            MaterialPageRoute(
+              builder: (context) => HomeCard()
+            ),
             (route) => false);
 
         setState(() {
