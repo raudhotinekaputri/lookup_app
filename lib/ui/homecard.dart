@@ -12,50 +12,22 @@ class HomeCard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
-          child: Column(
-        children: [
-          SizedBox(height: 96),
-          Expanded(
-            child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('posts').snapshots(),
-              builder: (context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+        child: Column(
+          children: [
+            SizedBox(height: 96),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 2, 
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: CardContainer(jenis: 'ditemukan', judul: "lorem", akun: '@syifa', status: 'belum ditemukan', gambar: 'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png'),
                   );
-                }
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: CardContainer(
-                        jenis: snapshot.data!.docs[index]
-                            .data()['jenis']
-                            .toString(),
-                        judul: snapshot.data!.docs[index]
-                            .data()['judul']
-                            .toString(),
-                        akun: snapshot.data!.docs[index]
-                            .data()['username']
-                            .toString(),
-                        status: snapshot.data!.docs[index]
-                            .data()['status']
-                            .toString(),
-                        gambar: snapshot.data!.docs[index]
-                            .data()['postUrl']
-                            .toString(),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          )
-        ],
-      )),
+                },
+              ),
+            )
+          ],
+        )),
       // body: SafeArea(
       //   child: Column(children: [
       //     SizedBox(height: 96),
@@ -65,6 +37,7 @@ class HomeCard extends StatelessWidget {
       //   ],)
       // ),
     );
+    
   }
 }
 
