@@ -1,11 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lookup_app/providers/user_provider.dart';
-import 'package:lookup_app/resources/firestore_method.dart';
-import 'package:lookup_app/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(const CreatePosting());
@@ -33,113 +27,23 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  String _status = "Belum Selesai";
-  String _jenis = ''; // Nilai default untuk Jenis
-  Uint8List? _file;
-  bool isLoading = false;
+  String _status = 'Kehilangan'; // Nilai default untuk Status
 
   final _judulPostTextboxController = TextEditingController();
   final _deskripsiPostController = TextEditingController();
 
-  _selectImage(BuildContext parentContext) async {
-    return showDialog(
-      context: parentContext,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: const Text('Create a Post'),
-          children: <Widget>[
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take a photo'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(ImageSource.camera);
-                  setState(() {
-                    _file = file;
-                  });
-                }),
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose from Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery);
-                  setState(() {
-                    _file = file;
-                  });
-                }),
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
+  Future<void> _getImageFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-  void postImage(String uid, String username) async {
-    setState(() {
-      isLoading = true;
-    });
-    // start the loading
-    try {
-      // upload to storage and db
-      String res = await FireStoreMethods().uploadPost(
-        _file!,
-        uid,
-        username,
-        _judulPostTextboxController.text,
-        _status,
-        _deskripsiPostController.text,
-        _jenis,
-      );
-      if (res == "success") {
-        setState(() {
-          isLoading = false;
-        });
-        if (context.mounted) {
-          showSnackBar(
-            context,
-            'Posted!',
-          );
-        }
-        clearImage();
-      } else {
-        if (context.mounted) {
-          showSnackBar(context, res);
-        }
-      }
-    } catch (err) {
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(
-        context,
-        err.toString(),
-      );
+    if (image != null) {
+      // Lakukan sesuatu dengan gambar yang dipilih, seperti menampilkan di UI
+      // image.path berisi path dari gambar yang dipilih
     }
-  }
-
-  void clearImage() {
-    setState(() {
-      _file = null;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _deskripsiPostController.dispose();
-    _judulPostTextboxController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Column(
       children: [
         Container(
@@ -219,10 +123,10 @@ class _CreatePostState extends State<CreatePost> {
                     left: 290,
                     top: 800,
                     child: FloatingActionButton(
-                      onPressed: () => postImage(
-                        userProvider.getUser.uid,
-                        userProvider.getUser.username,
-                      ),
+                      onPressed: () {
+                        // Tambahkan logika untuk tombol submit di sini
+                        // Misalnya, Anda bisa menambahkan panggilan fungsi untuk menangani proses pengiriman post
+                      },
                       backgroundColor: Colors.white,
                       child: Icon(
                         Icons.check,
@@ -314,8 +218,7 @@ class _CreatePostState extends State<CreatePost> {
                                   ),
                                   child: GestureDetector(
                                     onTap: () {
-                                      _selectImage(
-                                          context); // Panggil fungsi untuk mengambil gambar dari galeri
+                                      _getImageFromGallery(); // Panggil fungsi untuk mengambil gambar dari galeri
                                     },
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -393,10 +296,10 @@ class _CreatePostState extends State<CreatePost> {
                                             children: [
                                               Radio<String>(
                                                 value: 'Kehilangan',
-                                                groupValue: _jenis,
+                                                groupValue: _status,
                                                 onChanged: (String? value) {
                                                   setState(() {
-                                                    _jenis = value!;
+                                                    _status = value!;
                                                   });
                                                 },
                                                 visualDensity: VisualDensity(
@@ -421,10 +324,10 @@ class _CreatePostState extends State<CreatePost> {
                                               ),
                                               Radio<String>(
                                                 value: 'Ditemukan',
-                                                groupValue: _jenis,
+                                                groupValue: _status,
                                                 onChanged: (String? value) {
                                                   setState(() {
-                                                    _jenis = value!;
+                                                    _status = value!;
                                                   });
                                                 },
                                                 visualDensity: VisualDensity(
