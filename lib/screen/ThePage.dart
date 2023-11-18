@@ -13,24 +13,7 @@ class ThePage extends StatelessWidget {
       appBar: NavTop(),
       drawer: Sidebar(),
       bottomNavigationBar: const NavBottom(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 24),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: CardContainer(jenis:"ditemukan", judul:"lorem", akun:"@syifa", status:"belom selesai", gambar: 'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png',),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: SafeArea(child: HomeCard()),
     );
   }
 }

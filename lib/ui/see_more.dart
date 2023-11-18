@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/createpost.dart';
+import 'package:lookup_app/ui/editpost.dart';
 import 'package:lookup_app/ui/navbottom.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
@@ -12,104 +13,87 @@ class SeeMorePage extends StatefulWidget {
 }
 
 class _SeeMorePageState extends State<SeeMorePage> {
-  late Widget titleSection; 
+  late Widget titleSection;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavTop(),
       drawer: Sidebar(),
       bottomNavigationBar: const NavBottom(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            titleSection,
-            imageSection,
-            profileSection,
-            textSection,
-            commentButton,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Column _buildButtonColumn(Color color, IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color),
-        Container(
-          margin: const EdgeInsets.only(top: 4),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: color,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-void initState(){
-  super.initState();
-  titleSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Row(
-      children: [
-        Expanded(
+      body: Container(
+        color: const Color(0xFF212121), // Background color
+        child: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: const Text(
-                  'Dicari HP hilang',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              Text(
-                'Kandersteg, Switzerland',
-                style: TextStyle(
-                  color: Colors.grey[500],
-                ),
-              ),
+              titleSection,
+              imageSection,
+              profileSection,
+              textSection,
+              commentButton,
             ],
           ),
         ),
-        Column(
-  mainAxisSize: MainAxisSize.min,
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => CreatePost(),
-                      ),
-                    );
-      },
-      child: Icon(
-        Icons.edit,
-        color: Colors.white,
       ),
-    ),
-    Container(
-      margin: const EdgeInsets.only(top: 4),
-    ),
-  ],
-),
+    );
+  }
 
+  void initState() {
+    super.initState();
+    titleSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: const Text(
+                    'Dicari HP hilang',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+                Text(
+                  'Kandersteg, Switzerland',
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditPost(),
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 4),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
-      ],
-    ),
-  );
-}
   Widget imageSection = Container(
     padding: const EdgeInsets.all(16),
     child: Image.network(
@@ -147,11 +131,9 @@ void initState(){
             ),
           ],
         ),
-        // Add the status dropdown
         DropdownButton<String>(
-          value: 'Sudah Selesai', // You can set the initial value
-          onChanged: (String? newValue) {
-          },
+          value: 'Sudah Selesai',
+          onChanged: (String? newValue) {},
           items: <String>['Sudah Selesai', 'Belum Selesai']
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(

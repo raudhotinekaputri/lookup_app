@@ -3,10 +3,17 @@ import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/responsive/mobile_screen_layout.dart';
 import 'package:lookup_app/responsive/responsive_layout.dart';
 import 'package:lookup_app/responsive/web_screen_layout.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/screens/signup_screen.dart';
 import 'package:lookup_app/ui/comp/google_logo.dart';
+import 'package:lookup_app/ui/homecard.dart';
+import 'package:lookup_app/ui/see_more.dart';
+import 'package:lookup_app/ui/signup_page.dart';
 import 'package:lookup_app/utils/utils.dart';
+import 'package:lookup_app/widgets/square_tile.dart';
 import 'package:lookup_app/widgets/text_field_input.dart';
+import 'package:lookup_app/ui/homecard.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 
 class CardLogin extends StatefulWidget {
   const CardLogin({Key? key}) : super(key: key);
@@ -37,10 +44,7 @@ class _CardLoginState extends State<CardLogin> {
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => const ResponsiveLayout(
-                mobileScreenLayout: MobileScreenLayout(),
-                webScreenLayout: WebScreenLayout(),
-              ),
+              builder: (context) => HomeCard()
             ),
             (route) => false);
 
@@ -89,7 +93,10 @@ class _CardLoginState extends State<CardLogin> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  GoogleLogo(),
+                  SquareTile(
+                    imagePath: 'assets/google.png',
+                    onPressed: () => AuthMethods().signInWithGoogle(),
+                  )
                 ],
               ),
               SizedBox(height: 64),
@@ -140,7 +147,7 @@ class _CardLoginState extends State<CardLogin> {
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const SignupScreen(),
+                        builder: (context) => const SignUpPage(),
                       ),
                     ),
                     child: Container(
