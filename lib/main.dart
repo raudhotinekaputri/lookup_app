@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/screens/signup_screen.dart';
+import 'package:lookup_app/ui/comment.dart';
+import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/editpost.dart';
 import 'package:lookup_app/ui/detail_profil.dart';
 import 'package:lookup_app/ui/profile.dart';
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
       // mobileScreenLayout: MobileScreenLayout(),
       //  webScreenLayout: WebScreenLayout(),
       // ),
-      home: Profile(),
+      home: HomeCard(),
     );
   }
 }
