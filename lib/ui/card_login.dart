@@ -3,10 +3,12 @@ import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/responsive/mobile_screen_layout.dart';
 import 'package:lookup_app/responsive/responsive_layout.dart';
 import 'package:lookup_app/responsive/web_screen_layout.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/screens/signup_screen.dart';
 import 'package:lookup_app/ui/comp/google_logo.dart';
 import 'package:lookup_app/ui/homecard.dart';
 import 'package:lookup_app/ui/see_more.dart';
+import 'package:lookup_app/ui/signup_page.dart';
 import 'package:lookup_app/utils/utils.dart';
 import 'package:lookup_app/widgets/square_tile.dart';
 import 'package:lookup_app/widgets/text_field_input.dart';
@@ -40,9 +42,7 @@ class _CardLoginState extends State<CardLogin> {
     if (res == 'success') {
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => HomeCard()
-            ),
+            MaterialPageRoute(builder: (context) => ThePage()),
             (route) => false);
 
         setState(() {
@@ -144,7 +144,7 @@ class _CardLoginState extends State<CardLogin> {
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const SignupScreen(),
+                        builder: (context) => const SignUpPage(),
                       ),
                     ),
                     child: Container(

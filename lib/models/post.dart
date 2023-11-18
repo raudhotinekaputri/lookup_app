@@ -17,6 +17,7 @@ class Post {
     required this.judul,
     required this.status,
     required this.deskripsi,
+    required String jenis,
   });
 
   static Post fromSnap(DocumentSnapshot snap) {
@@ -29,6 +30,7 @@ class Post {
       datePublished: snapshot["datePublished"],
       judul: snapshot["judul"],
       status: snapshot["status"],
+      jenis: snapshot["jenis"],
       deskripsi: snapshot["deskripsi"],
     );
   }

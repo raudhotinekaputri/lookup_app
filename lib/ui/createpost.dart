@@ -2,8 +2,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lookup_app/providers/user_provider.dart';
 import 'package:lookup_app/resources/firestore_method.dart';
 import 'package:lookup_app/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const CreatePosting());
@@ -31,7 +33,8 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  String _status = ''; // Nilai default untuk Status
+  String _status = "Belum Selesai";
+  String _jenis = ''; // Nilai default untuk Jenis
   Uint8List? _file;
   bool isLoading = false;
 
@@ -78,7 +81,7 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
-  void postImage(String uid, String username, String profImage) async {
+  void postImage(String uid, String username) async {
     setState(() {
       isLoading = true;
     });
@@ -92,6 +95,7 @@ class _CreatePostState extends State<CreatePost> {
         _judulPostTextboxController.text,
         _status,
         _deskripsiPostController.text,
+        _jenis,
       );
       if (res == "success") {
         setState(() {
@@ -130,10 +134,12 @@ class _CreatePostState extends State<CreatePost> {
   void dispose() {
     super.dispose();
     _deskripsiPostController.dispose();
+    _judulPostTextboxController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Column(
       children: [
         Container(
@@ -213,10 +219,10 @@ class _CreatePostState extends State<CreatePost> {
                     left: 290,
                     top: 800,
                     child: FloatingActionButton(
-                      onPressed: () {
-                        // Tambahkan logika untuk tombol submit di sini
-                        // Misalnya, Anda bisa menambahkan panggilan fungsi untuk menangani proses pengiriman post
-                      },
+                      onPressed: () => postImage(
+                        userProvider.getUser.uid,
+                        userProvider.getUser.username,
+                      ),
                       backgroundColor: Colors.white,
                       child: Icon(
                         Icons.check,
@@ -387,10 +393,10 @@ class _CreatePostState extends State<CreatePost> {
                                             children: [
                                               Radio<String>(
                                                 value: 'Kehilangan',
-                                                groupValue: _status,
+                                                groupValue: _jenis,
                                                 onChanged: (String? value) {
                                                   setState(() {
-                                                    _status = value!;
+                                                    _jenis = value!;
                                                   });
                                                 },
                                                 visualDensity: VisualDensity(
@@ -415,10 +421,10 @@ class _CreatePostState extends State<CreatePost> {
                                               ),
                                               Radio<String>(
                                                 value: 'Ditemukan',
-                                                groupValue: _status,
+                                                groupValue: _jenis,
                                                 onChanged: (String? value) {
                                                   setState(() {
-                                                    _status = value!;
+                                                    _jenis = value!;
                                                   });
                                                 },
                                                 visualDensity: VisualDensity(

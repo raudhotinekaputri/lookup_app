@@ -4,7 +4,6 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
-
 class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,17 +25,27 @@ class HomeCard extends StatelessWidget {
                   );
                 }
                 return ListView.builder(
-                  itemCount: 2,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: CardContainer(
-                          jenis: 'ditemukan',
-                          judul: "lorem",
-                          akun: '@syifa',
-                          status: 'belum ditemukan',
-                          gambar:
-                              'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png'),
+                        jenis: snapshot.data!.docs[index]
+                            .data()['jenis']
+                            .toString(),
+                        judul: snapshot.data!.docs[index]
+                            .data()['judul']
+                            .toString(),
+                        akun: snapshot.data!.docs[index]
+                            .data()['username']
+                            .toString(),
+                        status: snapshot.data!.docs[index]
+                            .data()['status']
+                            .toString(),
+                        gambar: snapshot.data!.docs[index]
+                            .data()['postUrl']
+                            .toString(),
+                      ),
                     );
                   },
                 );
@@ -151,8 +160,10 @@ class CardContainer extends StatelessWidget {
                       onPressed: () {
                         // Lakukan sesuatu saat tombol ditekan
                         Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => SeeMorePage()),
-                          );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SeeMorePage()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Color(

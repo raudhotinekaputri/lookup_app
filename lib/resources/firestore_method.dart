@@ -8,7 +8,7 @@ class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<String> uploadPost(Uint8List file, String uid, String username,
-      String judul, String status, String deskripsi) async {
+      String judul, String status, String deskripsi, String jenis) async {
     // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
     String res = "Some error occurred";
     try {
@@ -21,6 +21,7 @@ class FireStoreMethods {
         datePublished: DateTime.now(),
         postUrl: photoUrl,
         judul: judul,
+        jenis: jenis,
         status: status,
         deskripsi: deskripsi,
       );
