@@ -7,15 +7,8 @@ import 'package:uuid/uuid.dart';
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<String> uploadPost(
-      String description,
-      Uint8List file,
-      String uid,
-      String username,
-      String profImage,
-      String judul,
-      String status,
-      String deskripsi) async {
+  Future<String> uploadPost(Uint8List file, String uid, String username,
+      String judul, String status, String deskripsi, String jenis) async {
     // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
     String res = "Some error occurred";
     try {
@@ -28,6 +21,7 @@ class FireStoreMethods {
         datePublished: DateTime.now(),
         postUrl: photoUrl,
         judul: judul,
+        jenis: jenis,
         status: status,
         deskripsi: deskripsi,
       );
@@ -53,7 +47,6 @@ class FireStoreMethods {
             .collection('comments')
             .doc(commentId)
             .set({
-          'profilePic': profilePic,
           'name': name,
           'uid': uid,
           'text': text,
@@ -80,33 +73,5 @@ class FireStoreMethods {
       res = err.toString();
     }
     return res;
-  }
-
-  Future<void> followUser(String uid, String followId) async {
-    try {
-      DocumentSnapshot snap =
-          await _firestore.collection('users').doc(uid).get();
-      List following = (snap.data()! as dynamic)['following'];
-
-      if (following.contains(followId)) {
-        await _firestore.collection('users').doc(followId).update({
-          'followers': FieldValue.arrayRemove([uid])
-        });
-
-        await _firestore.collection('users').doc(uid).update({
-          'following': FieldValue.arrayRemove([followId])
-        });
-      } else {
-        await _firestore.collection('users').doc(followId).update({
-          'followers': FieldValue.arrayUnion([uid])
-        });
-
-        await _firestore.collection('users').doc(uid).update({
-          'following': FieldValue.arrayUnion([followId])
-        });
-      }
-    } catch (e) {
-      if (kDebugMode) print(e.toString());
-    }
   }
 }

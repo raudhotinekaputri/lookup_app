@@ -1,12 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
-
 class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -18,7 +19,7 @@ class HomeCard extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    child: CardContainer(jenis: 'ditemukan', judul: "lorem", akun: '@syifa', status: 'belum ditemukan', gambar: "https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png"),
+                    child: CardContainer(jenis: 'ditemukan', judul: "lorem", akun: '@syifa', status: 'belum ditemukan', gambar: 'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png'),
                   );
                 },
               ),
@@ -132,11 +133,14 @@ class CardContainer extends StatelessWidget {
                       onPressed: () {
                         // Lakukan sesuatu saat tombol ditekan
                         Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => SeeMorePage()),
-                          );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SeeMorePage()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF8C92B6), // Ganti warna latar belakang sesuai keinginan Anda
+                        primary: Color(
+                            0xFF8C92B6), // Ganti warna latar belakang sesuai keinginan Anda
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
