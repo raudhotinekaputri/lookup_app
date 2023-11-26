@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/login_page.dart';
 import 'package:lookup_app/ui/homecard.dart';
 import 'package:lookup_app/ui/sidebar.dart';
@@ -24,7 +25,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     return Timer(durasiSplash, () {
       //pindah ke halaman home
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        return SignUpPage();
+        return const CreatePost();
       }));
     });
   }

@@ -7,6 +7,8 @@ import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class HomeCard extends StatelessWidget {
+  const HomeCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -14,7 +16,7 @@ class HomeCard extends StatelessWidget {
       body: SafeArea(
           child: Column(
         children: [
-          SizedBox(height: 96),
+          const SizedBox(height: 96),
           Expanded(
             child: StreamBuilder(
               stream:
@@ -30,7 +32,7 @@ class HomeCard extends StatelessWidget {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: CardContainer(
                         jenis: snapshot.data!.docs[index]
                             .data()['jenis']
