@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lookup_app/ui/homecard.dart';
+import 'package:lookup_app/ui/profile.dart';
+import 'package:lookup_app/ui/search_page.dart';
 
 void main() {
   runApp(const NavBottom());
@@ -29,19 +32,29 @@ class NavBottom extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.person, color: Colors.white),
                     onPressed: () {
-                      // Action for home button
-                    },
-                  ),
+                      Navigator.push(
+                         context,
+                         MaterialPageRoute(builder: (context) => Profile()), // Ganti HomePage() dengan halaman yang sesuai
+                         );
+                         },
+                         ),
+
                   IconButton(
                     icon: Icon(Icons.home, color: Colors.white),
                     onPressed: () {
-                      // Action for search button
+                      Navigator.push(
+                         context,
+                         MaterialPageRoute(builder: (context) => HomeCard()), // Ganti HomePage() dengan halaman yang sesuai
+                         );
                     },
                   ),
                   IconButton(
                     icon: Icon(Icons.search, color: Colors.white),
                     onPressed: () {
-                      // Action for profile button
+                      Navigator.push(
+                         context,
+                         MaterialPageRoute(builder: (context) => SearchPage()), // Ganti HomePage() dengan halaman yang sesuai
+                         );
                     },
                   ),
                 ],

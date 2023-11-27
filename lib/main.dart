@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lookup_app/screens/signup_screen.dart';
 import 'package:lookup_app/ui/editpost.dart';
 import 'package:lookup_app/ui/detail_profil.dart';
+import 'package:lookup_app/ui/search_page.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/signup_page.dart';
 import 'package:lookup_app/ui/splash_screen.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
       // mobileScreenLayout: MobileScreenLayout(),
       //  webScreenLayout: WebScreenLayout(),
       // ),
-      home: const SignUpPage(),
+      home: SearchPage(),
     );
   }
 }
