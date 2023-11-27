@@ -1,31 +1,63 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class HomeCard extends StatelessWidget {
+  const HomeCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 96),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 2, 
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: CardContainer(jenis: 'ditemukan', judul: "lorem", akun: '@syifa', status: 'belum ditemukan', gambar: 'https://asset.kompas.com/crops/CLjiHFPPa5GJihSrpTWbwNni99M=/167x0:1067x600/750x500/data/photo/2022/06/29/62bba4c09354f.png'),
+          child: Column(
+        children: [
+          const SizedBox(height: 96),
+          Expanded(
+            child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('posts').snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                },
-              ),
-            )
-          ],
-        )),
+                }
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: CardContainer(
+                        jenis: snapshot.data!.docs[index]
+                            .data()['jenis']
+                            .toString(),
+                        judul: snapshot.data!.docs[index]
+                            .data()['judul']
+                            .toString(),
+                        akun: snapshot.data!.docs[index]
+                            .data()['username']
+                            .toString(),
+                        status: snapshot.data!.docs[index]
+                            .data()['status']
+                            .toString(),
+                        gambar: snapshot.data!.docs[index]
+                            .data()['postUrl']
+                            .toString(),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          )
+        ],
+      )),
       // body: SafeArea(
       //   child: Column(children: [
       //     SizedBox(height: 96),
@@ -35,7 +67,6 @@ class HomeCard extends StatelessWidget {
       //   ],)
       // ),
     );
-    
   }
 }
 
@@ -91,8 +122,7 @@ class CardContainer extends StatelessWidget {
                     ),
                     Center(
                       child: Image.network(
-                        gambar, // Ganti dengan path gambar Anda
-                        width: 100, // Sesuaikan lebar gambar
+                        gambar, // Sesuaikan lebar gambar
                         height: 100, // Sesuaikan tinggi gambar
                         fit: BoxFit.contain,
                       ),
