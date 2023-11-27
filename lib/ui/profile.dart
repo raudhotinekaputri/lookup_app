@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({Key? key});
+  final String uid;
+  const Profile({Key? key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,11 @@ class Profile extends StatelessWidget {
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key});
+  @override
+  void initState(){
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +83,6 @@ class ProfileScreen extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(height: 20),
                   ],
                 ),
               ),

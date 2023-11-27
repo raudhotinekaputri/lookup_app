@@ -14,12 +14,14 @@ class SeeMorePage extends StatefulWidget {
 
 class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
+  
+  get uid => null;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavTop(),
-      drawer: Sidebar(),
+      drawer: Sidebar(uid: null,),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121), // Background color

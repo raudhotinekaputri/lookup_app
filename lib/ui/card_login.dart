@@ -44,7 +44,7 @@ class _CardLoginState extends State<CardLogin> {
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => HomeCard()
+              builder: (context) => ThePage()
             ),
             (route) => false);
 

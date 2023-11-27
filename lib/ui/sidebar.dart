@@ -1,16 +1,51 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/ui/login_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lookup_app/utils/utils.dart';
 
-class Sidebar extends StatelessWidget {
-  // final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  // User? user = FirebaseAuth.instance.currentUser;
-  // final uid = FirebaseAuth.instance.currentUser!.uid;
+class Sidebar extends StatefulWidget {
+  const Sidebar({Key? key, required uid}) : super(key: key);
 
-  // final userDocRef = firestore.collection('users').doc(uid);
-  
+  @override
+  State<Sidebar> createState() => _SidebarState();
+}
+
+class _SidebarState extends State<Sidebar> {
+  late User? _user;
+  late String _photoURL;
+  late String _username;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserData();
+  }
+
+  void _getUserData() {
+    _user = FirebaseAuth.instance.currentUser;
+    if (_user != null) {
+      _loadUserData(_user!.uid);
+    }
+  }
+
+  void _loadUserData(String uid) async {
+    try {
+      var snap =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      if (snap.exists) {
+        setState(() {
+         Map<String, dynamic> data = snap.data()!;
+          _photoURL = data['photoURL'] ?? ''; // Handling null value
+          _username = data['username'] ?? ''; // Handling null value
+        });
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -22,78 +57,101 @@ class Sidebar extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            // UserAccountsDrawerHeader(
-            //   decoration: BoxDecoration(
-            //     color:  Color(0xFF586CA6),
-            //   ),
-            //   accountName: Text(
-                
-            //     user.displayName ?? '',
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            //   accountEmail: null,
-            //   currentAccountPicture: CircleAvatar(
-            //     backgroundImage: NetworkImage(
-            //       user.photoURL ?? '',
-            //     ),
-            //   ),
-            //   onDetailsPressed: () {
-            //     //lorem
-            //   },
-            // ),
             DrawerHeader(
               decoration: BoxDecoration(
                 color: Color(0xFF586CA6),
               ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
+              child: _user != null
+                  ? Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(_photoURL),
+                                  radius: 25,
+                                ),
+                                SizedBox(width: 12),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      _username,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox.shrink(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 55.0), // Atur jarak ke kiri
+              child: ListTile(
+                leading: Icon(Icons.home, color: Colors.white),
+                title: Text('Home', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
-            SizedBox(height: 16),
-            ListTile(
-              leading: Icon(Icons.home, color: Colors.white),
-              title: Text('Home', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-              },
+            Padding(
+              padding: const EdgeInsets.only(left: 55.0), // Atur jarak ke kiri
+              child: ListTile(
+                leading: Icon(Icons.person, color: Colors.white),
+                title: Text('Profil', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.person, color: Colors.white),
-              title: Text('Profil', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-              },
+            Padding(
+              padding: const EdgeInsets.only(left: 55.0), // Atur jarak ke kiri
+              child: ListTile(
+                leading: Icon(Icons.article, color: Colors.white),
+                title: Text('My Post', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.article, color: Colors.white),
-              title: Text('My Post', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-              },
+            Padding(
+              padding: const EdgeInsets.only(left: 55.0), // Atur jarak ke kiri
+              child: ListTile(
+                leading: Icon(Icons.logout, color: Colors.white),
+                title: Text('Logout', style: TextStyle(color: Colors.white)),
+                onTap: () async {
+                  await AuthMethods().signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                    (route) => false,
+                  );
+                },
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.logout, color: Colors.white),
-              title: Text('Logout', style: TextStyle(color: Colors.white)),
-              onTap: () async {
-                await AuthMethods().signOut();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ),
-                  (route) => false,
-                );
-              },
-            ),
-            // Tambahkan item-menu lainnya sesuai kebutuhan
           ],
         ),
       ),
@@ -101,26 +159,5 @@ class Sidebar extends StatelessWidget {
   }
 }
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
-// import 'package:lookup_app/resources/auth_method.dart';
-// import 'package:lookup_app/ui/login_page.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 
-// class Sidebar extends StatefulWidget {
-//   const Sidebar({Key? key}) : super(key: key);
 
-//   @override
-//   State<Sidebar>createState() => _SidebarState();
-
-// }
-
-// class _SidebarState extends State<Sidebar> {
-//   final ref = FirebaseDatabase.instance.ref('users');
-  
-//   @override
-//   Widget build(BuildContext context) {
-//     // TODO: implement build
-//     throw UnimplementedError();
-//   }
-// }

@@ -12,6 +12,8 @@ import 'package:lookup_app/ui/signup_page.dart';
 import 'package:lookup_app/ui/splash_screen.dart';
 import 'package:lookup_app/utils/colors.dart';
 import 'package:lookup_app/ui/homecard.dart';
+import 'package:lookup_app/screen/ThePage.dart';
+import 'package:lookup_app/ui/sidebar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
       // mobileScreenLayout: MobileScreenLayout(),
       //  webScreenLayout: WebScreenLayout(),
       // ),
-      home: HomeCard(),
+      home: SplashScreenPage(),
     );
   }
 }
