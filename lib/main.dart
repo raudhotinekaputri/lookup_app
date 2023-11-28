@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/providers/user_provider.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/responsive/mobile_screen_layout.dart';
@@ -15,6 +18,8 @@ import 'package:lookup_app/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
+
   WidgetsFlutterBinding.ensureInitialized();
 
   // initialise app based on platform- web or mobile
@@ -54,10 +59,7 @@ class MyApp extends StatelessWidget {
               // Checking if the snapshot has any data or not
               if (snapshot.hasData) {
                 // if snapshot has data which means user is logged in then we check the width of screen and accordingly display the screen layout
-                return const ResponsiveLayout(
-                  mobileScreenLayout: MobileScreenLayout(),
-                  webScreenLayout: WebScreenLayout(),
-                );
+                return const ThePage();
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text('${snapshot.error}'),
@@ -77,5 +79,14 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpCLient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

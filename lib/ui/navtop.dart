@@ -17,7 +17,7 @@ class NavTop extends StatelessWidget implements PreferredSizeWidget {
                   child: Text(
                     'LookUp!',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.blueGrey,
                       fontSize: 19,
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w500,
