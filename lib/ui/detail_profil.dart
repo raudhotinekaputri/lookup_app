@@ -6,6 +6,8 @@ import 'package:lookup_app/ui/homecard.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({Key? key}) : super(key: key);
+  
+  get uid => null;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class ProfilPage extends StatelessWidget {
           // Add other actions if needed
         ],
       ),
-      drawer: Sidebar(),
+      drawer: Sidebar(uid: null,),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121),

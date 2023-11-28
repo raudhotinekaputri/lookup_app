@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
@@ -58,6 +58,17 @@ class HomeCard extends StatelessWidget {
           )
         ],
       )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreatePost()), // Ganti dengan halaman membuat post Anda
+          );
+        },
+        tooltip: 'Create Post',
+        backgroundColor: Colors.white,
+        child: Icon(Icons.add, color: Colors.black),
+      ),
       // body: SafeArea(
       //   child: Column(children: [
       //     SizedBox(height: 96),

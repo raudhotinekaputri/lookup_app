@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({Key? key});
+  final String uid;
+  const Profile({Key? key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,8 @@ class ProfileScreen extends StatelessWidget {
                       height: 133,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAfKzHBWV9eMbpQ3qNmYn5dIZDtFCQtuKvUw&usqp=CAU"),
+                          image: NetworkImage(
+                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAfKzHBWV9eMbpQ3qNmYn5dIZDtFCQtuKvUw&usqp=CAU"),
                           fit: BoxFit.fill,
                         ),
                         shape: BoxShape.circle,
@@ -77,7 +79,6 @@ class ProfileScreen extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(height: 20),
                   ],
                 ),
               ),

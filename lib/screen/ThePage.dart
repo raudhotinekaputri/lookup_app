@@ -13,7 +13,7 @@ class ThePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavTop(),
-      drawer: Sidebar(),
+      drawer: Sidebar(uid: null,),
       bottomNavigationBar: const NavBottom(),
       body: const SafeArea(child: HomeCard()),
       floatingActionButton: FloatingButton(onPressed: () {
