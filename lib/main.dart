@@ -19,6 +19,7 @@ import 'package:lookup_app/screens/login_screen.dart';
 import 'package:lookup_app/ui/splash_screen.dart';
 import 'package:lookup_app/utils/colors.dart';
 import 'package:lookup_app/ui/homecard.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();

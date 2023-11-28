@@ -6,6 +6,7 @@ import 'package:lookup_app/models/user.dart';
 import 'package:lookup_app/providers/user_provider.dart';
 import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/resources/firestore_method.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/utils/utils.dart';
 import 'package:lookup_app/widgets/text_field_input.dart';
 import 'package:provider/provider.dart';
@@ -69,6 +70,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
             showSnackBar(
               context,
               'Posted!',
+            );
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const ThePage(),
+              ),
+              (route) => false,
             );
           }
           clearImage();
