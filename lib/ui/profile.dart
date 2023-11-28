@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  const Profile({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,190 +10,125 @@ class Profile extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFF212121),
       ),
       home: Scaffold(
-        body: ListView(children: [
-          ProfileScreen(),
-        ]),
+        body: ProfileScreen(),
       ),
     );
   }
 }
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 330,
-          height: 224,
-          child: Stack(
-            children: [
-              Positioned(
-                left: 0,
-                top: 0,
-                child: Container(
-                  width: 330,
-                  height: 224,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    shadows: [
-                      BoxShadow(
-                        color: Color(0x19000000),
-                        blurRadius: 60,
-                        offset: Offset(0, 10),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                ),
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 330,
+              height: 224,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x19000000),
+                    blurRadius: 60,
+                    offset: Offset(0, 10),
+                    spreadRadius: 0,
+                  )
+                ],
               ),
-              Positioned(
-                left: 97,
-                top: 18,
-                child: Container(
-                  width: 133,
-                  height: 189,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 133,
-                              height: 133,
-                              decoration: ShapeDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage("https://via.placeholder.com/133x133"),
-                                  fit: BoxFit.fill,
-                                ),
-                                shape: OvalBorder(),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Container(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Syifa Hadju',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w500,
-                                      height: 0,
-                                    ),
-                                  ),
-                                  Text(
-                                    'syifahadju@mail.com',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color(0xFFA3A3A3),
-                                      fontSize: 12,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 20),
+                    Container(
+                      width: 133,
+                      height: 133,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAfKzHBWV9eMbpQ3qNmYn5dIZDtFCQtuKvUw&usqp=CAU"),
+                          fit: BoxFit.fill,
                         ),
+                        shape: BoxShape.circle,
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Syifa Hadju',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      'syifahadju@mail.com',
+                      style: TextStyle(
+                        color: Color(0xFFA3A3A3),
+                        fontSize: 12,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 20),
+            buildMenu('Edit Profil', Icons.account_circle),
+            SizedBox(height: 20),
+            buildMenu('Bantuan', Icons.help_outline),
+            SizedBox(height: 20),
+            buildMenu('Keluar', Icons.exit_to_app),
+          ],
         ),
-        SizedBox(height: 20),
-        Container(
-          width: 330,
-          height: 56,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          decoration: ShapeDecoration(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
+  Widget buildMenu(String title, IconData icon) {
+    return Container(
+      width: 330,
+      height: 56,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  color: Colors.black,
+                  size: 24,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 24,
-                      height: 24,
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    SizedBox(
-                      width: 102,
-                      child: Text(
-                        'Edit Profil',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 140),
-              Container(
-                width: 24,
-                height: 24,
-                padding: const EdgeInsets.only(top: 5, left: 9, right: 8, bottom: 5),
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                  ],
-                ),
-              ),
-            ],
-          ),
-        )
-      ],
+        ],
+      ),
     );
   }
 }

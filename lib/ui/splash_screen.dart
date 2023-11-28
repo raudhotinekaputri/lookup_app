@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/login_page.dart';
 import 'package:lookup_app/ui/homecard.dart';
+import 'package:lookup_app/ui/profile.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 import 'package:lookup_app/ui/signup_page.dart';
 
