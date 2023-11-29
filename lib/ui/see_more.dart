@@ -8,24 +8,36 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
+  String jenis;
 
-  const SeeMorePage(
+  String judul;
+
+  String status;
+
+  String photoUrl;
+
+  String deskripsi;
+
+  String uid;
+
+  SeeMorePage(
       {Key? key,
-      required String jenis,
-      required String judul,
-      required String status,
-      required photoUrl,
-      required String deskripsi,
-      required String uid})
+      required this.jenis,
+      required this.judul,
+      required this.status,
+      required this.photoUrl,
+      required this.deskripsi,
+      required this.uid})
       : super(key: key);
-  
+
   @override
   State<SeeMorePage> createState() => _SeeMorePageState();
 }
 
 class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
-  
+  late Widget imageSection;
+  late Widget profileSection;
 
   get uid => null;
 
@@ -57,7 +69,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
   @override
   void initState() {
     super.initState();
-    
+
     titleSection = Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -118,8 +130,8 @@ class _SeeMorePageState extends State<SeeMorePage> {
       width: 600,
       height: 240,
       fit: BoxFit.cover,
-    );
-
+    ),
+  );
 
   Widget profileSection = Container(
     padding: const EdgeInsets.all(16),
