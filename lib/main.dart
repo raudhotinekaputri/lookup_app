@@ -10,6 +10,8 @@ import 'package:lookup_app/responsive/responsive_layout.dart';
 import 'package:lookup_app/ui/profile.dart';
 import 'package:lookup_app/responsive/web_screen_layout.dart';
 import 'package:lookup_app/screens/login_screen.dart';
+import 'package:lookup_app/ui/search_page.dart';
+import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/splash_screen.dart';
 import 'package:lookup_app/utils/colors.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
       // mobileScreenLayout: MobileScreenLayout(),
       //  webScreenLayout: WebScreenLayout(),
       // ),
-      home: const SignUpPage(),
+      home: SeeMorePage(),
     );
   }
 }

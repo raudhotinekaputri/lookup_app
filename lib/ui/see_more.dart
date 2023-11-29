@@ -22,7 +22,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
       drawer: Sidebar(),
       bottomNavigationBar: const NavBottom(),
       body: Container(
-        color: const Color(0xFF212121), // Background color
+        color: const Color(0xFF212121),
         child: SafeArea(
           child: Column(
             children: [
@@ -38,6 +38,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     );
   }
 
+  @override
   void initState() {
     super.initState();
     titleSection = Container(
@@ -94,7 +95,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     );
   }
 
-  Widget imageSection = Container(
+  final Widget imageSection = Container(
     padding: const EdgeInsets.all(16),
     child: Image.network(
       'https://cdn1.katadata.co.id/media/images/temp/2023/01/05/GUNUNG_UNTUK_PEMULA-2023_01_05-17_39_26_3e89d633fc2e7715235860e7f62db958.png',
@@ -104,7 +105,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     ),
   );
 
-  Widget profileSection = Container(
+  final Widget profileSection = Container(
     padding: const EdgeInsets.all(16),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,7 +153,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     ),
   );
 
-  Widget textSection = Container(
+  final Widget textSection = Container(
     padding: const EdgeInsets.all(16),
     child: const Text(
       'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
@@ -165,7 +166,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     ),
   );
 
-  Widget commentButton = Padding(
+  final Widget commentButton = Padding(
     padding: const EdgeInsets.only(right: 30.0),
     child: Align(
       alignment: Alignment.centerRight,
