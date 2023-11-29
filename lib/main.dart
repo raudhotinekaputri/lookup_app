@@ -7,7 +7,7 @@ import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/responsive/mobile_screen_layout.dart';
 import 'package:lookup_app/responsive/responsive_layout.dart';
-import 'package:lookup_app/ui/profile.dart';
+import 'package:lookup_app/ui/profilescreen.dart';
 import 'package:lookup_app/responsive/web_screen_layout.dart';
 import 'package:lookup_app/screens/login_screen.dart';
 import 'package:lookup_app/ui/splash_screen.dart';
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       // mobileScreenLayout: MobileScreenLayout(),
       //  webScreenLayout: WebScreenLayout(),
       // ),
-      home: HomeCard(),
+      home: SplashScreenPage(),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/homecard.dart';
-import 'package:lookup_app/ui/profile.dart';
+import 'package:lookup_app/ui/profilescreen.dart';
 import 'package:lookup_app/ui/search_page.dart';
 
 void main() {
@@ -34,7 +34,7 @@ class NavBottom extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                          context,
-                         MaterialPageRoute(builder: (context) => Profile()), // Ganti HomePage() dengan halaman yang sesuai
+                         MaterialPageRoute(builder: (context) => ProfileScreen()), // Ganti HomePage() dengan halaman yang sesuai
                          );
                          },
                          ),
