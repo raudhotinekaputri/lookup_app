@@ -6,7 +6,7 @@ import 'package:lookup_app/ui/homecard.dart';
 import 'package:lookup_app/ui/profile.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 import 'package:lookup_app/ui/signup_page.dart';
-import 'package:lookup_app/ui/editpost.dart';
+
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
   @override
@@ -26,7 +26,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     return Timer(durasiSplash, () {
       //pindah ke halaman home
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        return const LoginPage();
+        return const CreatePost();
       }));
     });
   }

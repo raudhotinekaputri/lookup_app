@@ -10,11 +10,9 @@ import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
-import 'package:lookup_app/responsive/mobile_screen_layout.dart';
-import 'package:lookup_app/responsive/responsive_layout.dart';
-import 'package:lookup_app/ui/profile.dart';
-import 'package:lookup_app/responsive/web_screen_layout.dart';
-import 'package:lookup_app/screens/login_screen.dart';
+import 'package:lookup_app/ui/editpost.dart';
+import 'package:lookup_app/ui/see_more.dart';
+import 'package:lookup_app/ui/signup_page.dart';
 import 'package:lookup_app/ui/splash_screen.dart';
 import 'package:lookup_app/utils/colors.dart';
 import 'package:lookup_app/ui/homecard.dart';
@@ -66,7 +64,10 @@ class MyApp extends StatelessWidget {
               // Checking if the snapshot has any data or not
               if (snapshot.hasData) {
                 // if snapshot has data which means user is logged in then we check the width of screen and accordingly display the screen layout
-                return const ThePage();
+                return const ResponsiveLayout(
+                  mobileScreenLayout: MobileScreenLayout(),
+                  webScreenLayout: WebScreenLayout(),
+                );
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text('${snapshot.error}'),

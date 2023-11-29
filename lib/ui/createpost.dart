@@ -3,10 +3,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lookup_app/providers/user_provider.dart';
-import 'package:lookup_app/resources/firestore_method.dart';
-import 'package:lookup_app/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(const CreatePosting());
@@ -36,8 +32,8 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  String _status = 'Kehilangan';
-  String _jenis = '';
+  String _status = 'Kehilangan'; // Nilai default untuk Status
+  String _jenis = ''; // Nilai default untuk Jenis
   Uint8List? _file;
   bool isLoading = false;
 
@@ -49,9 +45,8 @@ class _CreatePostState extends State<CreatePost> {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      setState(() {
-        _file = File(image.path).readAsBytesSync();
-      });
+      // Lakukan sesuatu dengan gambar yang dipilih, seperti menampilkan di UI
+      // image.path berisi path dari gambar yang dipilih
     }
   }
 
@@ -168,192 +163,134 @@ class _CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create & Posting'),
+        title: Text('Create & Posting'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _judulPostTextboxController,
+              decoration: InputDecoration(
+                hintText: 'Judul',
+              ),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                _getImageFromGallery(); // Panggil fungsi untuk mengambil gambar dari galeri
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: IntrinsicHeight(
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextFormField(
-                              controller: _judulPostTextboxController,
-                              decoration: const InputDecoration(
-                                hintText: 'Judul',
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            GestureDetector(
-                              onTap: () {
-                                _getImageFromGallery();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF5F5F5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: <Widget>[
-                                    isLoading
-                                        ? const LinearProgressIndicator()
-                                        : const Padding(
-                                            padding: EdgeInsets.only(top: 0.0)),
-                                    const Divider(),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        if (_file != null)
-                                          SizedBox(
-                                            height: 45.0,
-                                            width: 45.0,
-                                            child: AspectRatio(
-                                              aspectRatio: 487 / 451,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    alignment: FractionalOffset
-                                                        .topCenter,
-                                                    image: MemoryImage(_file!),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                    const Divider(),
-                                    Row(
-                                      children: const [
-                                        Text(
-                                          'Pilih Gambar Dari Galeri',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        SizedBox(width: 60),
-                                        Icon(
-                                          Icons.photo,
-                                          size: 24,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Status',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Row(
-                                  children: [
-                                    Radio<String>(
-                                      value: 'Kehilangan',
-                                      groupValue: _status,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          _status = value!;
-                                        });
-                                      },
-                                      activeColor: Colors.black,
-                                    ),
-                                    Text(
-                                      'Kehilangan',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Radio<String>(
-                                      value: 'Ditemukan',
-                                      groupValue: _status,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          _status = value!;
-                                        });
-                                      },
-                                      activeColor: Colors.black,
-                                    ),
-                                    Text(
-                                      'Ditemukan',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            const SizedBox(height: 20),
-                            Container(
-                              height: 376,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF5F5F5),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: TextFormField(
-                                controller: _deskripsiPostController,
-                                style: const TextStyle(color: Colors.black),
-                                maxLines: 10,
-                                decoration: const InputDecoration(
-                                  hintText: 'Deskripsi',
-                                  hintStyle: TextStyle(
-                                    color: Color(0xFFA3A3A3),
-                                    fontSize: 16,
-                                  ),
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            FloatingActionButton(
-                              onPressed: () => postImage(
-                                userProvider.getUser?.uid ?? '',
-                                userProvider.getUser?.username ?? '',
-                              ),
-                              backgroundColor: Colors.white,
-                              child: const Icon(
-                                Icons.check,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Pilih Gambar Dari Galeri',
+                      style: TextStyle(
+                        fontSize: 16,
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(width: 60),
+                    Icon(
+                      Icons.photo,
+                      size: 24,
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
+            ),
+            SizedBox(height: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Status',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                      value: 'Kehilangan',
+                      groupValue: _status,
+                      onChanged: (String? value) {
+                        setState(() {
+                          _status = value!;
+                        });
+                      },
+                      activeColor: Colors.black,
+                    ),
+                    Text(
+                      'Kehilangan',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Radio<String>(
+                      value: 'Ditemukan',
+                      groupValue: _status,
+                      onChanged: (String? value) {
+                        setState(() {
+                          _status = value!;
+                        });
+                      },
+                      activeColor: Colors.black,
+                    ),
+                    Text(
+                      'Ditemukan',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Container(
+              height: 376,
+              decoration: BoxDecoration(
+                color: Color(0xFFF5F5F5),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: TextFormField(
+                controller: _deskripsiPostController,
+                style: TextStyle(color: Colors.black),
+                maxLines: 10,
+                decoration: InputDecoration(
+                  hintText: 'Deskripsi',
+                  hintStyle: TextStyle(
+                    color: Color(0xFFA3A3A3),
+                    fontSize: 16,
+                  ),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            FloatingActionButton(
+              onPressed: () => postImage(
+                userProvider.getUser.uid,
+                userProvider.getUser.username,
+              ),
+              backgroundColor: Colors.white,
+              child: Icon(
+                Icons.check,
+                color: Colors.green,
+              ),
+            ),
+          ],
         ),
       ),
     );
