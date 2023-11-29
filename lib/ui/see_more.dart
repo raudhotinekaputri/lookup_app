@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/editpost.dart';
 import 'package:lookup_app/ui/navbottom.dart';
@@ -36,6 +37,25 @@ class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
   late Widget imageSection;
   late Widget profileSection;
+  late String username;
+  late String photoURL;
+  late Widget textSection;
+  bool isLoadinguser = true;
+  Future<void> getUser() async {
+    final userData = await AuthMethods().getUserData("username");
+    final userPhotoURL = await AuthMethods().getUserData("photoUrl");
+
+    setState(() {
+      username = userData ?? "username";
+      photoURL = userPhotoURL ??
+          "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+      isLoadinguser = false;
+    });
+
+    print(username);
+    print(photoURL);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,16 +94,17 @@ class _SeeMorePageState extends State<SeeMorePage> {
               children: [
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: const Text(
-                    'Dicari HP hilang',
+                  child: Text(
+                    widget.judul,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
                 Text(
-                  'Kandersteg, Switzerland',
+                  widget.jenis,
                   style: TextStyle(
                     color: Colors.grey[500],
                   ),
@@ -142,12 +163,17 @@ class _SeeMorePageState extends State<SeeMorePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Syifa Hadju',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
+                  isLoadinguser
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Text(
+                          username,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
                 ],
               ),
             ],
@@ -173,20 +199,14 @@ class _SeeMorePageState extends State<SeeMorePage> {
         ],
       ),
     );
+    textSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Text(
+        widget.deskripsi,
+        softWrap: true,
+      ),
+    );
   }
-
-  Widget textSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: const Text(
-      'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
-      'Alps. Situated 1,578 meters above sea level, it is one of the '
-      'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
-      'half-hour walk through pastures and pine forest, leads you to the '
-      'lake, which warms to 20 degrees Celsius in the summer. Activities '
-      'enjoyed here include rowing, and riding the summer toboggan run.',
-      softWrap: true,
-    ),
-  );
 
   Widget commentButton = Padding(
     padding: const EdgeInsets.only(right: 30.0),
