@@ -5,6 +5,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/providers/user_provider.dart';
+import 'package:lookup_app/responsive/mobile_screen_layout.dart';
+import 'package:lookup_app/responsive/responsive_layout.dart';
+import 'package:lookup_app/responsive/web_screen_layout.dart';
 import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
@@ -82,7 +85,7 @@ class MyApp extends StatelessWidget {
               );
             }
 
-            return const SplashScreenPage();
+            return EditPosting();
           },
         ),
       ),

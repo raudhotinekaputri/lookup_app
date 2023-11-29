@@ -3,6 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lookup_app/providers/user_provider.dart';
+import 'package:lookup_app/resources/firestore_method.dart';
+import 'package:lookup_app/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const CreatePosting());
@@ -178,6 +182,11 @@ class _CreatePostState extends State<CreatePost> {
                 hintText: 'Judul',
               ),
             ),
+
+
+
+
+            
             SizedBox(height: 20),
             GestureDetector(
               onTap: () {

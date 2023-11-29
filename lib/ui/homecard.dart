@@ -49,6 +49,11 @@ class HomeCard extends StatelessWidget {
                         gambar: snapshot.data!.docs[index]
                             .data()['postUrl']
                             .toString(),
+                        uid:
+                            snapshot.data!.docs[index].data()['uid'].toString(),
+                        deskripsi: snapshot.data!.docs[index]
+                            .data()['deskripsi']
+                            .toString(),
                       ),
                     );
                   },
@@ -58,6 +63,19 @@ class HomeCard extends StatelessWidget {
           )
         ],
       )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    CreatePost()), // Ganti dengan halaman membuat post Anda
+          );
+        },
+        tooltip: 'Create Post',
+        backgroundColor: Colors.white,
+        child: Icon(Icons.add, color: Colors.black),
+      ),
       // body: SafeArea(
       //   child: Column(children: [
       //     SizedBox(height: 96),

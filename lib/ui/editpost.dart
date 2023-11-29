@@ -58,7 +58,7 @@ class _EditPostState extends State<EditPost> {
       children: [
         Container(
             width: 393,
-            height: 852,
+            height: 900,
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(color: Color(0xFF292929)),
             child: Stack(children: [
@@ -70,8 +70,12 @@ class _EditPostState extends State<EditPost> {
                   icon: Icon(Icons.arrow_back,
                       color: Colors.white), // Menggunakan ikon panah ke kiri
                   onPressed: () {
-                    // Tambahkan logika untuk kembali ke halaman sebelumnya di sini
-                    // Misalnya, Anda bisa menggunakan Navigator.pop(context) untuk kembali
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HomeCard()), // Ganti HomePage() dengan halaman yang sesuai
+                      );
                   },
                 ),
               ),
@@ -131,7 +135,7 @@ class _EditPostState extends State<EditPost> {
                 children: [
                   Positioned(
                     left: 290,
-                    top: 800,
+                    top: 810,
                     child: FloatingActionButton(
                       onPressed: () {
                         // Tambahkan logika untuk tombol submit di sini
@@ -219,7 +223,7 @@ class _EditPostState extends State<EditPost> {
                                   width: 294,
                                   height: 56,
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
+                                      horizontal: 17, vertical: 18),
                                   decoration: ShapeDecoration(
                                     color: Color(0xFFF5F5F5),
                                     shape: RoundedRectangleBorder(
