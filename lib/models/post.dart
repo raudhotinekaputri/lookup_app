@@ -8,6 +8,7 @@ class Post {
   final String username;
   final String uid;
   final DateTime datePublished;
+  final String jenis;
 
   const Post({
     required this.postUrl,
@@ -17,7 +18,7 @@ class Post {
     required this.judul,
     required this.status,
     required this.deskripsi,
-    required String jenis,
+    required this.jenis,
   });
 
   static Post fromSnap(DocumentSnapshot snap) {
@@ -41,6 +42,7 @@ class Post {
         "postUrl": postUrl,
         "datePublished": datePublished,
         "judul": judul,
+        "jenis": jenis,
         "status": status,
         "deskripsi": deskripsi,
       };

@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/editpost.dart';
@@ -6,8 +8,17 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
-  const SeeMorePage({Key? key}) : super(key: key);
 
+  const SeeMorePage(
+      {Key? key,
+      required String jenis,
+      required String judul,
+      required String status,
+      required photoUrl,
+      required String deskripsi,
+      required String uid})
+      : super(key: key);
+  
   @override
   State<SeeMorePage> createState() => _SeeMorePageState();
 }
@@ -15,13 +26,16 @@ class SeeMorePage extends StatefulWidget {
 class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
   
+
   get uid => null;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavTop(),
-      drawer: Sidebar(uid: null,),
+      drawer: Sidebar(
+        uid: null,
+      ),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121), // Background color
@@ -40,8 +54,10 @@ class _SeeMorePageState extends State<SeeMorePage> {
     );
   }
 
+  @override
   void initState() {
     super.initState();
+    
     titleSection = Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -98,13 +114,12 @@ class _SeeMorePageState extends State<SeeMorePage> {
 
   Widget imageSection = Container(
     padding: const EdgeInsets.all(16),
-    child: Image.network(
-      'https://cdn1.katadata.co.id/media/images/temp/2023/01/05/GUNUNG_UNTUK_PEMULA-2023_01_05-17_39_26_3e89d633fc2e7715235860e7f62db958.png',
+    child: Image.network(photoUrl),
       width: 600,
       height: 240,
       fit: BoxFit.cover,
-    ),
-  );
+    );
+
 
   Widget profileSection = Container(
     padding: const EdgeInsets.all(16),

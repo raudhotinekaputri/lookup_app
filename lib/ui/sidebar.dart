@@ -13,37 +13,42 @@ class Sidebar extends StatefulWidget {
 }
 
 class _SidebarState extends State<Sidebar> {
-  late User? _user;
-  late String _photoURL;
-  late String _username;
+  late String username;
+  late String photoURL;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _getUserData();
+    initUserData();
   }
 
-  void _getUserData() {
-    _user = FirebaseAuth.instance.currentUser;
-    if (_user != null) {
-      _loadUserData(_user!.uid);
+  Future<void> initUserData() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      await getUser();
+    } else {
+      setState(() {
+        username = "username";
+        photoURL =
+            "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+        isLoading = false;
+      });
     }
   }
 
-  void _loadUserData(String uid) async {
-    try {
-      var snap =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      if (snap.exists) {
-        setState(() {
-         Map<String, dynamic> data = snap.data()!;
-          _photoURL = data['photoURL'] ?? ''; // Handling null value
-          _username = data['username'] ?? ''; // Handling null value
-        });
-      }
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
+  Future<void> getUser() async {
+    final userData = await AuthMethods().getUserData("username");
+    final userPhotoURL = await AuthMethods().getUserData("photoUrl");
+
+    setState(() {
+      username = userData ?? "username";
+      photoURL = userPhotoURL ??
+          "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+      isLoading = false;
+    });
+
+    print(username);
+    print(photoURL);
   }
 
   @override
@@ -61,8 +66,11 @@ class _SidebarState extends State<Sidebar> {
               decoration: BoxDecoration(
                 color: Color(0xFF586CA6),
               ),
-              child: _user != null
-                  ? Row(
+              child: isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Row(
                       children: [
                         IconButton(
                           icon: Icon(
@@ -75,12 +83,12 @@ class _SidebarState extends State<Sidebar> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Row(
                               children: [
                                 CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(_photoURL),
+                                  backgroundImage: NetworkImage(this.photoURL),
                                   radius: 25,
                                 ),
                                 SizedBox(width: 12),
@@ -89,7 +97,7 @@ class _SidebarState extends State<Sidebar> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      _username,
+                                      this.username,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -103,11 +111,10 @@ class _SidebarState extends State<Sidebar> {
                           ),
                         ),
                       ],
-                    )
-                  : SizedBox.shrink(),
+                    ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 55.0), // Atur jarak ke kiri
+              padding: const EdgeInsets.only(left: 55.0), // Adjust left padding
               child: ListTile(
                 leading: Icon(Icons.home, color: Colors.white),
                 title: Text('Home', style: TextStyle(color: Colors.white)),
@@ -117,7 +124,7 @@ class _SidebarState extends State<Sidebar> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 55.0), // Atur jarak ke kiri
+              padding: const EdgeInsets.only(left: 55.0), // Adjust left padding
               child: ListTile(
                 leading: Icon(Icons.person, color: Colors.white),
                 title: Text('Profil', style: TextStyle(color: Colors.white)),
@@ -127,7 +134,7 @@ class _SidebarState extends State<Sidebar> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 55.0), // Atur jarak ke kiri
+              padding: const EdgeInsets.only(left: 55.0), // Adjust left padding
               child: ListTile(
                 leading: Icon(Icons.article, color: Colors.white),
                 title: Text('My Post', style: TextStyle(color: Colors.white)),
@@ -137,7 +144,7 @@ class _SidebarState extends State<Sidebar> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 55.0), // Atur jarak ke kiri
+              padding: const EdgeInsets.only(left: 55.0), // Adjust left padding
               child: ListTile(
                 leading: Icon(Icons.logout, color: Colors.white),
                 title: Text('Logout', style: TextStyle(color: Colors.white)),
@@ -158,6 +165,3 @@ class _SidebarState extends State<Sidebar> {
     );
   }
 }
-
-
-

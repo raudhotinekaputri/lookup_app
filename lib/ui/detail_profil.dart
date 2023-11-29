@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/ui/navbottom.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
@@ -6,7 +7,7 @@ import 'package:lookup_app/ui/homecard.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({Key? key}) : super(key: key);
-  
+
   get uid => null;
 
   @override
@@ -18,7 +19,7 @@ class ProfilPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomeCard()),
+              MaterialPageRoute(builder: (context) => ThePage()),
             );
           },
         ),
@@ -33,7 +34,9 @@ class ProfilPage extends StatelessWidget {
           // Add other actions if needed
         ],
       ),
-      drawer: Sidebar(uid: null,),
+      drawer: Sidebar(
+        uid: null,
+      ),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121),
@@ -83,8 +86,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
                   ? NetworkImage(_selectedImagePath)
                   : null,
               child: _selectedImagePath.isEmpty
-                  ? const Icon(Icons.add_a_photo,
-                      size: 40, color: Colors.white)
+                  ? const Icon(Icons.add_a_photo, size: 40, color: Colors.white)
                   : null,
             ),
           ),
