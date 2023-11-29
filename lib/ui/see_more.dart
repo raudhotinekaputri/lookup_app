@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/editpost.dart';
 import 'package:lookup_app/ui/navbottom.dart';
@@ -6,7 +7,27 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
-  const SeeMorePage({Key? key}) : super(key: key);
+  String jenis;
+
+  String judul;
+
+  String status;
+
+  String photoUrl;
+
+  String deskripsi;
+
+  String uid;
+
+  SeeMorePage(
+      {Key? key,
+      required this.jenis,
+      required this.judul,
+      required this.status,
+      required this.photoUrl,
+      required this.deskripsi,
+      required this.uid})
+      : super(key: key);
 
   @override
   State<SeeMorePage> createState() => _SeeMorePageState();
@@ -14,12 +35,34 @@ class SeeMorePage extends StatefulWidget {
 
 class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
+  late Widget imageSection;
+  late Widget profileSection;
+  late String username;
+  late String photoURL;
+  late Widget textSection;
+  bool isLoadinguser = true;
+  Future<void> getUser() async {
+    final userData = await AuthMethods().getUserData("username");
+    final userPhotoURL = await AuthMethods().getUserData("photoUrl");
+
+    setState(() {
+      username = userData ?? "username";
+      photoURL = userPhotoURL ??
+          "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+      isLoadinguser = false;
+    });
+
+    print(username);
+    print(photoURL);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavTop(),
-      drawer: Sidebar(),
+      drawer: Sidebar(
+        uid: null,
+      ),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121), // Background color
@@ -38,6 +81,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     );
   }
 
+  @override
   void initState() {
     super.initState();
     titleSection = Container(
@@ -50,16 +94,17 @@ class _SeeMorePageState extends State<SeeMorePage> {
               children: [
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: const Text(
-                    'Dicari HP hilang',
+                  child: Text(
+                    widget.judul,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
                 Text(
-                  'Kandersteg, Switzerland',
+                  widget.jenis,
                   style: TextStyle(
                     color: Colors.grey[500],
                   ),
@@ -92,78 +137,76 @@ class _SeeMorePageState extends State<SeeMorePage> {
         ],
       ),
     );
-  }
-
-  Widget imageSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Image.network(
-      'https://cdn1.katadata.co.id/media/images/temp/2023/01/05/GUNUNG_UNTUK_PEMULA-2023_01_05-17_39_26_3e89d633fc2e7715235860e7f62db958.png',
-      width: 600,
-      height: 240,
-      fit: BoxFit.cover,
-    ),
-  );
-
-  Widget profileSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://example.com/path/to/your/profile/image.jpg',
+    imageSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Image.network(
+        widget.photoUrl,
+        width: 600,
+        height: 240,
+        fit: BoxFit.cover,
+      ),
+    );
+    profileSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                  widget.photoUrl,
+                ),
+                radius: 15,
               ),
-              radius: 15,
-            ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Syifa Hadju',
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  isLoadinguser
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Text(
+                          username,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                ],
+              ),
+            ],
+          ),
+          DropdownButton<String>(
+            value: 'Sudah Selesai',
+            onChanged: (String? newValue) {},
+            items: <String>['Sudah Selesai', 'Belum Selesai']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
+                    color:
+                        value == 'Sudah Selesai' ? Colors.blue : Colors.black,
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        DropdownButton<String>(
-          value: 'Sudah Selesai',
-          onChanged: (String? newValue) {},
-          items: <String>['Sudah Selesai', 'Belum Selesai']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: value == 'Sudah Selesai' ? Colors.white : Colors.white,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    ),
-  );
-
-  Widget textSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: const Text(
-      'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
-      'Alps. Situated 1,578 meters above sea level, it is one of the '
-      'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
-      'half-hour walk through pastures and pine forest, leads you to the '
-      'lake, which warms to 20 degrees Celsius in the summer. Activities '
-      'enjoyed here include rowing, and riding the summer toboggan run.',
-      softWrap: true,
-    ),
-  );
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+    textSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Text(
+        widget.deskripsi,
+        softWrap: true,
+      ),
+    );
+  }
 
   Widget commentButton = Padding(
     padding: const EdgeInsets.only(right: 30.0),
