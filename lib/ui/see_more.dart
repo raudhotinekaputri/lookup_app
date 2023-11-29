@@ -6,7 +6,27 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
-  const SeeMorePage({Key? key}) : super(key: key);
+  String jenis;
+
+  String judul;
+
+  String status;
+
+  String photoUrl;
+
+  String deskripsi;
+
+  String uid;
+
+  SeeMorePage(
+      {Key? key,
+      required this.jenis,
+      required this.judul,
+      required this.status,
+      required this.photoUrl,
+      required this.deskripsi,
+      required this.uid})
+      : super(key: key);
 
   @override
   State<SeeMorePage> createState() => _SeeMorePageState();
@@ -20,7 +40,9 @@ class _SeeMorePageState extends State<SeeMorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavTop(),
-      drawer: Sidebar(uid: null,),
+      drawer: Sidebar(
+        uid: null,
+      ),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121), // Background color
