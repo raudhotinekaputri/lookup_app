@@ -6,24 +6,36 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
+  String jenis;
 
-  const SeeMorePage(
+  String judul;
+
+  String status;
+
+  String photoUrl;
+
+  String deskripsi;
+
+  String uid;
+
+  SeeMorePage(
       {Key? key,
-      required String jenis,
-      required String judul,
-      required String status,
-      required photoUrl,
-      required String deskripsi,
-      required String uid})
+      required this.jenis,
+      required this.judul,
+      required this.status,
+      required this.photoUrl,
+      required this.deskripsi,
+      required this.uid})
       : super(key: key);
-  
+
   @override
   State<SeeMorePage> createState() => _SeeMorePageState();
 }
 
 class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
-  
+  late Widget imageSection;
+  late Widget profileSection;
 
   get uid => null;
 
@@ -55,7 +67,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
   @override
   void initState() {
     super.initState();
-    
+
     titleSection = Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -108,64 +120,64 @@ class _SeeMorePageState extends State<SeeMorePage> {
         ],
       ),
     );
-  }
-
-  Widget imageSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Image.network(photoUrl),
-      width: 600,
-      height: 240,
-      fit: BoxFit.cover,
-    ),
-  );
-
-  Widget profileSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://lh3.googleusercontent.com/a/ACg8ocILsBio1plJL1bd96M2EkrSMqXiiICucMqAa0Qu4lnL=s96-c',
+    imageSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Image.network(
+        widget.photoUrl,
+        width: 600,
+        height: 240,
+        fit: BoxFit.cover,
+      ),
+    );
+    profileSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                  widget.photoUrl,
+                ),
+                radius: 15,
               ),
-              radius: 15,
-            ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Syifa Hadju',
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Syifa Hadju',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          DropdownButton<String>(
+            value: 'Sudah Selesai',
+            onChanged: (String? newValue) {},
+            items: <String>['Sudah Selesai', 'Belum Selesai']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
+                    color:
+                        value == 'Sudah Selesai' ? Colors.blue : Colors.black,
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        DropdownButton<String>(
-          value: 'Sudah Selesai',
-          onChanged: (String? newValue) {},
-          items: <String>['Sudah Selesai', 'Belum Selesai']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: value == 'Sudah Selesai' ? Colors.white : Colors.white,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    ),
-  );
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget textSection = Container(
     padding: const EdgeInsets.all(16),
