@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/homecard.dart';
-import 'package:lookup_app/ui/profilescreen.dart';
+import 'package:lookup_app/ui/profile.dart';
 import 'package:lookup_app/ui/search_page.dart';
 
 void main() {
