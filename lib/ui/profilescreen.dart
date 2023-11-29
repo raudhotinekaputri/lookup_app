@@ -1,45 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lookup_app/utils/utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class Profile extends StatelessWidget {
+  final String uid;
+  const Profile({Key? key, required this.uid});
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Color(0xFF212121),
+      ),
+      home: Scaffold(
+        body: ProfileScreen(),
+      ),
+    );
+  }
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  late User? _user; // Firebase User object
-  late String _username = ''; // Username
-
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({Key? key});
   @override
   void initState(){
     super.initState();
-    _getUserData();
-  }
-
-  Future<void> _getUserData() async {
-    // Get current authenticated user
-    User? currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser != null) {
-      setState(() {
-        _user = currentUser;
-      });
-
-      // Get username from Firestore
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUser.uid)
-          .get();
-
-      setState(() {
-        _username = userDoc['username'];
-      });
-    }
+    getData();
   }
 
   @override
@@ -75,8 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 133,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAfKzHBWV9eMbpQ3qNmYn5dIZDtFCQtuKvUw&usqp=CAU"),
+                          image: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAfKzHBWV9eMbpQ3qNmYn5dIZDtFCQtuKvUw&usqp=CAU"),
                           fit: BoxFit.fill,
                         ),
                         shape: BoxShape.circle,
@@ -84,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      _username,
+                      'Syifa Hadju',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,

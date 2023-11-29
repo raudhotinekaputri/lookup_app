@@ -1,10 +1,14 @@
-import 'dart:typed_data';
+import 'dart:typed_data' show Uint8List;
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lookup_app/models/user.dart';
+import 'package:lookup_app/providers/user_provider.dart';
+import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/resources/firestore_method.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/utils/utils.dart';
-
+import 'package:lookup_app/widgets/text_field_input.dart';
 import 'package:provider/provider.dart';
 
 class AddPostScreen extends StatefulWidget {
@@ -17,78 +21,72 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
   bool isLoading = false;
-  final TextEditingController _descriptionController = TextEditingController();
-
-  _selectImage(BuildContext parentContext) async {
-    return showDialog(
-      context: parentContext,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: const Text('Create a Post'),
-          children: <Widget>[
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take a photo'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(ImageSource.camera);
-                  setState(() {
-                    _file = file;
-                  });
-                }),
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose from Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery);
-                  setState(() {
-                    _file = file;
-                  });
-                }),
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
+  final TextEditingController _deskripsiPostController =
+      TextEditingController();
+  final TextEditingController _judulPostController = TextEditingController();
+  String _jenis = "Kehilangan";
+  final String _status = "belum";
+  late String uid;
+  late String username;
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      _file = im;
+      print(_file);
+    });
   }
 
-  void postImage(String uid, String username) async {
+  void postImage() async {
     setState(() {
       isLoading = true;
     });
-    // start the loading
+
     try {
-      // upload to storage and db
-      String res = await FireStoreMethods().uploadPost(
-        _file!,
-        uid,
-        username,
-        _judulPostTextboxController.text,
-        _status,
-        _deskripsiPostController.text,
-        _jenis,
-      );
-      if (res == "success") {
-        setState(() {
-          isLoading = false;
-        });
-        if (context.mounted) {
-          showSnackBar(
-            context,
-            'Posted!',
-          );
+      username = (await AuthMethods().getUserData("username"))!;
+      print('Username: $username');
+      uid = (await AuthMethods().getUserData("uid"))!;
+      print('uid: $uid');
+    } catch (error) {
+      // Handle errors
+      print('Error in someFunction: $error');
+    }
+    try {
+      if (_file != null) {
+        String res = await FireStoreMethods().uploadPost(
+          file: _file!,
+          uid: uid,
+          username: username,
+          judul: _judulPostController.text,
+          status: _status,
+          deskripsi: _deskripsiPostController.text,
+          jenis: _jenis,
+        );
+
+        if (res == "success") {
+          setState(() {
+            isLoading = false;
+          });
+          if (context.mounted) {
+            showSnackBar(
+              context,
+              'Posted!',
+            );
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const ThePage(),
+              ),
+              (route) => false,
+            );
+          }
+          clearImage();
+        } else {
+          if (context.mounted) {
+            showSnackBar(context, res);
+          }
         }
-        clearImage();
       } else {
         if (context.mounted) {
-          showSnackBar(context, res);
+          showSnackBar(context, 'Please select an image.');
         }
       }
     } catch (err) {
@@ -112,96 +110,128 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void dispose() {
     super.dispose();
     _deskripsiPostController.dispose();
-    _judulPostTextboxController.dispose();
+    _judulPostController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
-
-    return _file == null
-        ? Center(
-            child: IconButton(
-              icon: const Icon(
-                Icons.upload,
-              ),
-              onPressed: () => _selectImage(context),
-            ),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              backgroundColor: mobileBackgroundColor,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: clearImage,
-              ),
-              title: const Text(
-                'Post to',
-              ),
-              centerTitle: false,
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => postImage(
-                    userProvider.getUser.uid,
-                    userProvider.getUser.username,
-                    userProvider.getUser.photoUrl,
-                  ),
-                  child: const Text(
-                    "Post",
-                    style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0),
-                  ),
-                )
-              ],
-            ),
-            // POST FORM
-            body: Column(
+    return Material(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.grey,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: clearImage,
+          ),
+          title: const Text(
+            'Posting',
+          ),
+          centerTitle: false,
+        ),
+        body: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                isLoading
-                    ? const LinearProgressIndicator()
-                    : const Padding(padding: EdgeInsets.only(top: 0.0)),
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        userProvider.getUser.photoUrl,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextFieldInput(
+                    textEditingController: _judulPostController,
+                    hintText: 'Judul',
+                    textInputType: TextInputType.text,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextFieldInput(
+                    textEditingController: _deskripsiPostController,
+                    hintText: 'Deskripsi',
+                    textInputType: TextInputType.text,
+                  ),
+                ),
+                Stack(
+                  children: [
+                    _file != null
+                        ? CircleAvatar(
+                            radius: 64,
+                            backgroundImage: MemoryImage(_file!),
+                            backgroundColor: Colors.red,
+                          )
+                        : const CircleAvatar(
+                            radius: 64,
+                            backgroundColor: Colors.red,
+                          ),
+                    Positioned(
+                      bottom: -10,
+                      left: 80,
+                      child: IconButton(
+                        onPressed: selectImage,
+                        icon: const Icon(Icons.add_a_photo),
                       ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: TextField(
-                        controller: _descriptionController,
-                        decoration: const InputDecoration(
-                            hintText: "Write a caption...",
-                            border: InputBorder.none),
-                        maxLines: 8,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 45.0,
-                      width: 45.0,
-                      child: AspectRatio(
-                        aspectRatio: 487 / 451,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                            fit: BoxFit.fill,
-                            alignment: FractionalOffset.topCenter,
-                            image: MemoryImage(_file!),
-                          )),
-                        ),
-                      ),
-                    ),
+                    )
                   ],
                 ),
-                const Divider(),
               ],
             ),
-          );
+            const Divider(),
+            SizedBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Jenis Postingan?",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const Divider(),
+                  RadioListTile(
+                    title: const Text("Kehilangan"),
+                    value: "Kehilangan",
+                    groupValue: _jenis,
+                    onChanged: (value) {
+                      setState(() {
+                        _jenis =
+                            value.toString().isEmpty ? "" : value.toString();
+                        print(_jenis);
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    title: const Text("Ditemukan"),
+                    value: "Ditemukan",
+                    groupValue: _jenis,
+                    onChanged: (value) {
+                      setState(() {
+                        _jenis =
+                            value.toString().isEmpty ? "" : value.toString();
+                        print(_jenis);
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const Divider(),
+            InkWell(
+              onTap: postImage,
+              child: Container(
+                child: !isLoading
+                    ? const Text(
+                        'Post',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      )
+                    : const CircularProgressIndicator(
+                        color: Colors.blue,
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -43,9 +43,7 @@ class _CardLoginState extends State<CardLogin> {
     if (res == 'success') {
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => ThePage()
-            ),
+            MaterialPageRoute(builder: (context) => ThePage()),
             (route) => false);
 
         setState(() {

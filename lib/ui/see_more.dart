@@ -115,7 +115,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
           children: [
             CircleAvatar(
               backgroundImage: NetworkImage(
-                'https://example.com/path/to/your/profile/image.jpg',
+                'https://lh3.googleusercontent.com/a/ACg8ocILsBio1plJL1bd96M2EkrSMqXiiICucMqAa0Qu4lnL=s96-c',
               ),
               radius: 15,
             ),

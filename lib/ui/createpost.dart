@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ void main() {
 }
 
 class CreatePosting extends StatelessWidget {
-  const CreatePosting({super.key});
+  const CreatePosting({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class CreatePosting extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
-        body: SafeArea(child: ListView(children: [CreatePost()])),
+        body: SafeArea(child: ListView(children: const [CreatePost()])),
       ),
     );
   }
@@ -35,8 +36,8 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  String _status = 'Kehilangan'; // Nilai default untuk Status
-  String _jenis = ''; // Nilai default untuk Jenis
+  String _status = 'Kehilangan';
+  String _jenis = '';
   Uint8List? _file;
   bool isLoading = false;
 
@@ -48,8 +49,9 @@ class _CreatePostState extends State<CreatePost> {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      // Lakukan sesuatu dengan gambar yang dipilih, seperti menampilkan di UI
-      // image.path berisi path dari gambar yang dipilih
+      setState(() {
+        _file = File(image.path).readAsBytesSync();
+      });
     }
   }
 
@@ -65,10 +67,12 @@ class _CreatePostState extends State<CreatePost> {
               child: const Text('Take a photo'),
               onPressed: () async {
                 Navigator.pop(context);
-                Uint8List file = await pickImage(ImageSource.camera);
-                setState(() {
-                  _file = file;
-                });
+                Uint8List? file = await pickImage(ImageSource.camera);
+                if (file != null) {
+                  setState(() {
+                    _file = file;
+                  });
+                }
               },
             ),
             SimpleDialogOption(
@@ -76,10 +80,12 @@ class _CreatePostState extends State<CreatePost> {
               child: const Text('Choose from Gallery'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                Uint8List file = await pickImage(ImageSource.gallery);
-                setState(() {
-                  _file = file;
-                });
+                Uint8List? file = await pickImage(ImageSource.gallery);
+                if (file != null) {
+                  setState(() {
+                    _file = file;
+                  });
+                }
               },
             ),
             SimpleDialogOption(
@@ -99,18 +105,26 @@ class _CreatePostState extends State<CreatePost> {
     setState(() {
       isLoading = true;
     });
+
     try {
-      // Check if _file is not null before proceeding
       if (_file != null) {
-        // upload to storage and db
+        // Print data before processing
+        print('UID: $uid');
+        print('Username: $username');
+        print('Judul: ${_judulPostTextboxController.text}');
+        print('Status: $_status');
+        print('Deskripsi: ${_deskripsiPostController.text}');
+        print('Jenis: $_jenis');
+
+        // Continue with the upload to storage and db
         String res = await FireStoreMethods().uploadPost(
-          _file!,
-          uid,
-          username,
-          _judulPostTextboxController.text,
-          _status,
-          _deskripsiPostController.text,
-          _jenis,
+          file: _file!,
+          uid: uid,
+          username: username,
+          judul: _judulPostTextboxController.text,
+          status: _status,
+          deskripsi: _deskripsiPostController.text,
+          jenis: _jenis,
         );
         if (res == "success") {
           setState(() {
@@ -129,10 +143,10 @@ class _CreatePostState extends State<CreatePost> {
           }
         }
       } else {
-        // Handle the case where _file is null
-        if (context.mounted) {
-          showSnackBar(context, 'Please select an image before posting.');
-        }
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, 'Please select an image.');
       }
     } catch (err) {
       setState(() {
@@ -154,134 +168,192 @@ class _CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create & Posting'),
+        title: const Text('Create & Posting'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              controller: _judulPostTextboxController,
-              decoration: InputDecoration(
-                hintText: 'Judul',
-              ),
-            ),
-            SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                _getImageFromGallery(); // Panggil fungsi untuk mengambil gambar dari galeri
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                decoration: BoxDecoration(
-                  color: Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.circular(20),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: viewportConstraints.maxHeight,
                 ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Pilih Gambar Dari Galeri',
-                      style: TextStyle(
-                        fontSize: 16,
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              controller: _judulPostTextboxController,
+                              decoration: const InputDecoration(
+                                hintText: 'Judul',
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            GestureDetector(
+                              onTap: () {
+                                _getImageFromGallery();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF5F5F5),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Column(
+                                  children: <Widget>[
+                                    isLoading
+                                        ? const LinearProgressIndicator()
+                                        : const Padding(
+                                            padding: EdgeInsets.only(top: 0.0)),
+                                    const Divider(),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        if (_file != null)
+                                          SizedBox(
+                                            height: 45.0,
+                                            width: 45.0,
+                                            child: AspectRatio(
+                                              aspectRatio: 487 / 451,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    alignment: FractionalOffset
+                                                        .topCenter,
+                                                    image: MemoryImage(_file!),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Row(
+                                      children: const [
+                                        Text(
+                                          'Pilih Gambar Dari Galeri',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        SizedBox(width: 60),
+                                        Icon(
+                                          Icons.photo,
+                                          size: 24,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Status',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Radio<String>(
+                                      value: 'Kehilangan',
+                                      groupValue: _status,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          _status = value!;
+                                        });
+                                      },
+                                      activeColor: Colors.black,
+                                    ),
+                                    Text(
+                                      'Kehilangan',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Radio<String>(
+                                      value: 'Ditemukan',
+                                      groupValue: _status,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          _status = value!;
+                                        });
+                                      },
+                                      activeColor: Colors.black,
+                                    ),
+                                    Text(
+                                      'Ditemukan',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            const SizedBox(height: 20),
+                            Container(
+                              height: 376,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF5F5F5),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: TextFormField(
+                                controller: _deskripsiPostController,
+                                style: const TextStyle(color: Colors.black),
+                                maxLines: 10,
+                                decoration: const InputDecoration(
+                                  hintText: 'Deskripsi',
+                                  hintStyle: TextStyle(
+                                    color: Color(0xFFA3A3A3),
+                                    fontSize: 16,
+                                  ),
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            FloatingActionButton(
+                              onPressed: () => postImage(
+                                userProvider.getUser?.uid ?? '',
+                                userProvider.getUser?.username ?? '',
+                              ),
+                              backgroundColor: Colors.white,
+                              child: const Icon(
+                                Icons.check,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 60),
-                    Icon(
-                      Icons.photo,
-                      size: 24,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Status',
-                  style: TextStyle(
-                    fontSize: 16,
+                    ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Radio<String>(
-                      value: 'Kehilangan',
-                      groupValue: _status,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _status = value!;
-                        });
-                      },
-                      activeColor: Colors.black,
-                    ),
-                    Text(
-                      'Kehilangan',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Radio<String>(
-                      value: 'Ditemukan',
-                      groupValue: _status,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _status = value!;
-                        });
-                      },
-                      activeColor: Colors.black,
-                    ),
-                    Text(
-                      'Ditemukan',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Container(
-              height: 376,
-              decoration: BoxDecoration(
-                color: Color(0xFFF5F5F5),
-                borderRadius: BorderRadius.circular(20),
               ),
-              child: TextFormField(
-                controller: _deskripsiPostController,
-                style: TextStyle(color: Colors.black),
-                maxLines: 10,
-                decoration: InputDecoration(
-                  hintText: 'Deskripsi',
-                  hintStyle: TextStyle(
-                    color: Color(0xFFA3A3A3),
-                    fontSize: 16,
-                  ),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            FloatingActionButton(
-              onPressed: () => postImage(
-                userProvider.getUser.uid,
-                userProvider.getUser.username,
-              ),
-              backgroundColor: Colors.white,
-              child: Icon(
-                Icons.check,
-                color: Colors.green,
-              ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
