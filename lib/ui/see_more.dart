@@ -22,7 +22,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
       drawer: Sidebar(),
       bottomNavigationBar: const NavBottom(),
       body: Container(
-        color: const Color(0xFF212121),
+        color: const Color(0xFF212121), // Background color
         child: SafeArea(
           child: Column(
             children: [
@@ -93,67 +93,66 @@ class _SeeMorePageState extends State<SeeMorePage> {
         ],
       ),
     );
-  }
-
-  final Widget imageSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Image.network(
-      'https://cdn1.katadata.co.id/media/images/temp/2023/01/05/GUNUNG_UNTUK_PEMULA-2023_01_05-17_39_26_3e89d633fc2e7715235860e7f62db958.png',
-      width: 600,
-      height: 240,
-      fit: BoxFit.cover,
-    ),
-  );
-
-  final Widget profileSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://example.com/path/to/your/profile/image.jpg',
+    imageSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Image.network(
+        widget.photoUrl,
+        width: 600,
+        height: 240,
+        fit: BoxFit.cover,
+      ),
+    );
+    profileSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                  widget.photoUrl,
+                ),
+                radius: 15,
               ),
-              radius: 15,
-            ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Syifa Hadju',
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Syifa Hadju',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          DropdownButton<String>(
+            value: 'Sudah Selesai',
+            onChanged: (String? newValue) {},
+            items: <String>['Sudah Selesai', 'Belum Selesai']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
+                    color:
+                        value == 'Sudah Selesai' ? Colors.blue : Colors.black,
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        DropdownButton<String>(
-          value: 'Sudah Selesai',
-          onChanged: (String? newValue) {},
-          items: <String>['Sudah Selesai', 'Belum Selesai']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: value == 'Sudah Selesai' ? Colors.white : Colors.white,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    ),
-  );
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
 
-  final Widget textSection = Container(
+  Widget textSection = Container(
     padding: const EdgeInsets.all(16),
     child: const Text(
       'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
@@ -166,7 +165,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     ),
   );
 
-  final Widget commentButton = Padding(
+  Widget commentButton = Padding(
     padding: const EdgeInsets.only(right: 30.0),
     child: Align(
       alignment: Alignment.centerRight,
