@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lookup_app/ui/homecard.dart';
 
 void main() {
   runApp(const EditPosting());
@@ -76,8 +77,12 @@ class _EditPostState extends State<EditPost> {
                     icon: Icon(Icons.arrow_back,
                         color: Colors.white), // Menggunakan ikon panah ke kiri
                     onPressed: () {
-                      // Tambahkan logika untuk kembali ke halaman sebelumnya di sini
-                      // Misalnya, Anda bisa menggunakan Navigator.pop(context) untuk kembali
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HomeCard())
+                     ); // Ganti HomePage() dengan halaman yang sesuai
                     },
                   ),
                 ),
