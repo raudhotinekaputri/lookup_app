@@ -14,7 +14,7 @@ class EditPosting extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
-      home: Scaffold(
+      home: const Scaffold(
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -30,6 +30,8 @@ class EditPosting extends StatelessWidget {
 }
 
 class EditPost extends StatefulWidget {
+  const EditPost({super.key});
+
   @override
   _EditPostState createState() => _EditPostState();
 }
