@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
       // mobileScreenLayout: MobileScreenLayout(),
       //  webScreenLayout: WebScreenLayout(),
       // ),
-      home: HomeCard(),
+      home: ProfileScreen(),
     );
   }
 

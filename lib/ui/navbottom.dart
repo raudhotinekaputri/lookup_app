@@ -34,7 +34,7 @@ class NavBottom extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                          context,
-                         MaterialPageRoute(builder: (context) => Profile()), // Ganti HomePage() dengan halaman yang sesuai
+                         MaterialPageRoute(builder: (context) => Profile(uid: '',)), // Ganti HomePage() dengan halaman yang sesuai
                          );
                          },
                          ),

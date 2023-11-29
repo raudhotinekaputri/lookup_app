@@ -130,8 +130,8 @@ class _SeeMorePageState extends State<SeeMorePage> {
       width: 600,
       height: 240,
       fit: BoxFit.cover,
-    ),
   );
+
 
   Widget profileSection = Container(
     padding: const EdgeInsets.all(16),
