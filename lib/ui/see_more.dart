@@ -38,9 +38,6 @@ class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
   late Widget imageSection;
   late Widget profileSection;
-
-  get uid => null;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +66,6 @@ class _SeeMorePageState extends State<SeeMorePage> {
   @override
   void initState() {
     super.initState();
-
     titleSection = Container(
       padding: const EdgeInsets.all(16),
       child: Row(
