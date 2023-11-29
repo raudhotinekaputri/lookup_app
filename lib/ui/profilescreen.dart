@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
-  final String uid;
-  const Profile({Key? key, required this.uid});
+  // final String uid;
+  const Profile({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +20,10 @@ class Profile extends StatelessWidget {
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key});
   @override
-  void initState(){
-    super.initState();
-    getData();
-  }
+  // void initState(){
+  //   super.initState();
+  //   getData();
+  // }
 
   @override
   Widget build(BuildContext context) {
