@@ -38,6 +38,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
   late String photoURL;
   late String senderPhotoUrl = "";
   late Widget textSection;
+  late bool isthesender = false;
 
   @override
   Future<void> getUser() async {
@@ -67,6 +68,9 @@ class _SeeMorePageState extends State<SeeMorePage> {
         print("Sender Photo URL: $senderPhotoUrl");
       } else {
         print("No user found with the provided UID");
+      }
+      if (widget.uid == userID) {
+        isthesender = true;
       }
     } catch (error) {
       print("Error fetching data: $error");
@@ -115,22 +119,24 @@ class _SeeMorePageState extends State<SeeMorePage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => EditPost(),
-                    ),
-                  );
-                },
-                child: const Hero(
-                  tag: 'uniqueTagForEditButton',
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              isthesender
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EditPost(),
+                          ),
+                        );
+                      },
+                      child: const Hero(
+                        tag: 'uniqueTagForEditButton',
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Container(),
               Container(
                 margin: const EdgeInsets.only(top: 4),
               ),
