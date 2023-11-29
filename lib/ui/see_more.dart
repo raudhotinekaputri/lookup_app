@@ -1,5 +1,3 @@
-// ignore_for_file: sort_child_properties_last
-
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/editpost.dart';
@@ -118,64 +116,64 @@ class _SeeMorePageState extends State<SeeMorePage> {
         ],
       ),
     );
-  }
-
-  Widget imageSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Image.network(photoUrl),
-      width: 600,
-      height: 240,
-      fit: BoxFit.cover,
-  );
-
-
-  Widget profileSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://lh3.googleusercontent.com/a/ACg8ocILsBio1plJL1bd96M2EkrSMqXiiICucMqAa0Qu4lnL=s96-c',
+    imageSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Image.network(
+        widget.photoUrl,
+        width: 600,
+        height: 240,
+        fit: BoxFit.cover,
+      ),
+    );
+    profileSection = Container(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                  widget.photoUrl,
+                ),
+                radius: 15,
               ),
-              radius: 15,
-            ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Syifa Hadju',
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Syifa Hadju',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          DropdownButton<String>(
+            value: 'Sudah Selesai',
+            onChanged: (String? newValue) {},
+            items: <String>['Sudah Selesai', 'Belum Selesai']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
+                    color:
+                        value == 'Sudah Selesai' ? Colors.blue : Colors.black,
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        DropdownButton<String>(
-          value: 'Sudah Selesai',
-          onChanged: (String? newValue) {},
-          items: <String>['Sudah Selesai', 'Belum Selesai']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: value == 'Sudah Selesai' ? Colors.white : Colors.white,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    ),
-  );
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget textSection = Container(
     padding: const EdgeInsets.all(16),
