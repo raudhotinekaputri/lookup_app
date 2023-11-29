@@ -52,7 +52,8 @@ class ProfileScreen extends StatelessWidget {
                       height: 133,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAfKzHBWV9eMbpQ3qNmYn5dIZDtFCQtuKvUw&usqp=CAU"),
+                          image: NetworkImage(
+                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAfKzHBWV9eMbpQ3qNmYn5dIZDtFCQtuKvUw&usqp=CAU"),
                           fit: BoxFit.fill,
                         ),
                         shape: BoxShape.circle,

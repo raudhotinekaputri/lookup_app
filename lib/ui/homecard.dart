@@ -49,6 +49,11 @@ class HomeCard extends StatelessWidget {
                         gambar: snapshot.data!.docs[index]
                             .data()['postUrl']
                             .toString(),
+                        uid:
+                            snapshot.data!.docs[index].data()['uid'].toString(),
+                        deskripsi: snapshot.data!.docs[index]
+                            .data()['deskripsi']
+                            .toString(),
                       ),
                     );
                   },
