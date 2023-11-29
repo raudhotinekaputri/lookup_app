@@ -6,7 +6,27 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
-  const SeeMorePage({Key? key}) : super(key: key);
+  String jenis;
+
+  String judul;
+
+  String status;
+
+  String photoUrl;
+
+  String deskripsi;
+
+  String uid;
+
+  SeeMorePage(
+      {Key? key,
+      required this.jenis,
+      required this.judul,
+      required this.status,
+      required this.photoUrl,
+      required this.deskripsi,
+      required this.uid})
+      : super(key: key);
 
   @override
   State<SeeMorePage> createState() => _SeeMorePageState();
@@ -14,12 +34,18 @@ class SeeMorePage extends StatefulWidget {
 
 class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
+  late Widget imageSection;
+  late Widget profileSection;
+
+  get uid => null;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavTop(),
-      drawer: Sidebar(),
+      drawer: Sidebar(
+        uid: null,
+      ),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121),
@@ -41,6 +67,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
   @override
   void initState() {
     super.initState();
+
     titleSection = Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -95,7 +122,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     );
   }
 
-  final Widget imageSection = Container(
+  Widget imageSection = Container(
     padding: const EdgeInsets.all(16),
     child: Image.network(
       'https://cdn1.katadata.co.id/media/images/temp/2023/01/05/GUNUNG_UNTUK_PEMULA-2023_01_05-17_39_26_3e89d633fc2e7715235860e7f62db958.png',
@@ -105,7 +132,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
     ),
   );
 
-  final Widget profileSection = Container(
+  Widget profileSection = Container(
     padding: const EdgeInsets.all(16),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

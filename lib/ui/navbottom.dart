@@ -33,28 +33,34 @@ class NavBottom extends StatelessWidget {
                     icon: Icon(Icons.person, color: Colors.white),
                     onPressed: () {
                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => Profile()), // Ganti HomePage() dengan halaman yang sesuai
-                         );
-                         },
-                         ),
-
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Profile(
+                                  uid: '',
+                                )), // Ganti HomePage() dengan halaman yang sesuai
+                      );
+                    },
+                  ),
                   IconButton(
                     icon: Icon(Icons.home, color: Colors.white),
                     onPressed: () {
                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => HomeCard()), // Ganti HomePage() dengan halaman yang sesuai
-                         );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HomeCard()), // Ganti HomePage() dengan halaman yang sesuai
+                      );
                     },
                   ),
                   IconButton(
                     icon: Icon(Icons.search, color: Colors.white),
                     onPressed: () {
                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => SearchPage()), // Ganti HomePage() dengan halaman yang sesuai
-                         );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SearchPage()), // Ganti HomePage() dengan halaman yang sesuai
+                      );
                     },
                   ),
                 ],

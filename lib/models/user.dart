@@ -6,17 +6,14 @@ class User {
   final String photoUrl;
   final String username;
   final String bio;
-  final List followers;
-  final List following;
 
-  const User(
-      {required this.username,
-      required this.uid,
-      required this.photoUrl,
-      required this.email,
-      required this.bio,
-      required this.followers,
-      required this.following});
+  const User({
+    required this.username,
+    required this.uid,
+    required this.photoUrl,
+    required this.email,
+    required this.bio,
+  });
 
   static User fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -27,8 +24,6 @@ class User {
       email: snapshot["email"],
       photoUrl: snapshot["photoUrl"],
       bio: snapshot["bio"],
-      followers: snapshot["followers"],
-      following: snapshot["following"],
     );
   }
 
@@ -38,7 +33,5 @@ class User {
         "email": email,
         "photoUrl": photoUrl,
         "bio": bio,
-        "followers": followers,
-        "following": following,
       };
 }

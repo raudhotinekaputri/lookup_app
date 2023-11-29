@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
@@ -49,6 +49,11 @@ class HomeCard extends StatelessWidget {
                         gambar: snapshot.data!.docs[index]
                             .data()['postUrl']
                             .toString(),
+                        uid:
+                            snapshot.data!.docs[index].data()['uid'].toString(),
+                        deskripsi: snapshot.data!.docs[index]
+                            .data()['deskripsi']
+                            .toString(),
                       ),
                     );
                   },
@@ -58,6 +63,19 @@ class HomeCard extends StatelessWidget {
           )
         ],
       )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    CreatePost()), // Ganti dengan halaman membuat post Anda
+          );
+        },
+        tooltip: 'Create Post',
+        backgroundColor: Colors.white,
+        child: Icon(Icons.add, color: Colors.black),
+      ),
       // body: SafeArea(
       //   child: Column(children: [
       //     SizedBox(height: 96),
@@ -76,6 +94,8 @@ class CardContainer extends StatelessWidget {
   final String akun;
   final String status;
   final String gambar;
+  final String uid;
+  final String deskripsi;
 
   CardContainer({
     Key? key,
@@ -84,6 +104,8 @@ class CardContainer extends StatelessWidget {
     required this.akun,
     required this.status,
     required this.gambar,
+    required this.uid,
+    required this.deskripsi,
   }) : super(key: key);
 
   @override
@@ -165,7 +187,13 @@ class CardContainer extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SeeMorePage()),
+                              builder: (context) => SeeMorePage(
+                                  jenis: jenis,
+                                  judul: judul,
+                                  status: status,
+                                  deskripsi: deskripsi,
+                                  photoUrl: gambar,
+                                  uid: uid)),
                         );
                       },
                       style: ElevatedButton.styleFrom(

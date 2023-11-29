@@ -9,6 +9,47 @@ class AuthMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Future<String?> getUserData(String ambil) async {
+    try {
+      User currentUser = _auth.currentUser!;
+      DocumentSnapshot documentSnapshot =
+          await _firestore.collection('users').doc(currentUser.uid).get();
+      print(documentSnapshot.toString());
+
+      // Access the specified field from the document snapshot
+      Map<String, dynamic>? data =
+          documentSnapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        if (ambil == "username") {
+          String? username = data['username'];
+          return username;
+        } else if (ambil == "photoUrl") {
+          String? photoUrl = data['photoUrl'];
+          return photoUrl;
+        } else if (ambil == "uid") {
+          String? uid = data['uid'];
+          return uid;
+        } else if (ambil == "bio") {
+          String? bio = data['bio'];
+          return bio;
+        } else {
+          String? email =
+              data['email']; // Assuming 'email' is the correct field name
+          return email;
+        }
+      } else {
+        // Handle the case where the data map is null
+        print('Data map is null.');
+        return null; // or return a default value, depending on your use case
+      }
+    } catch (error) {
+      // Handle errors
+      print('Error fetching $ambil: $error');
+      throw error; // You might want to handle this differently in your app
+    }
+  }
+
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
