@@ -30,11 +30,15 @@ void main() async {
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-          apiKey: "AIzaSyCZ-xrXqD5D19Snauto-Fx_nLD7PLrBXGM",
-          appId: "1:585119731880:web:eca6e4b3c42a755cee329d",
-          messagingSenderId: "585119731880",
-          projectId: "instagram-clone-4cea4",
-          storageBucket: 'instagram-clone-4cea4.appspot.com'),
+          apiKey: "AIzaSyCqwd5L11mayRTMNVxj36OqTVnvu970efE",
+          authDomain: "lookup-app-3271c.firebaseapp.com",
+          databaseURL:
+              "https://lookup-app-3271c-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "lookup-app-3271c",
+          storageBucket: "lookup-app-3271c.appspot.com",
+          messagingSenderId: "4338278854",
+          appId: "1:4338278854:web:061fcc0ff1756d424752c7",
+          measurementId: "G-6Q2W2968YJ"),
     );
   } else {
     await Firebase.initializeApp();

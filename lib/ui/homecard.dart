@@ -49,6 +49,11 @@ class HomeCard extends StatelessWidget {
                         gambar: snapshot.data!.docs[index]
                             .data()['postUrl']
                             .toString(),
+                        uid:
+                            snapshot.data!.docs[index].data()['uid'].toString(),
+                        deskripsi: snapshot.data!.docs[index]
+                            .data()['deskripsi']
+                            .toString(),
                       ),
                     );
                   },
@@ -62,7 +67,9 @@ class HomeCard extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreatePost()), // Ganti dengan halaman membuat post Anda
+            MaterialPageRoute(
+                builder: (context) =>
+                    CreatePost()), // Ganti dengan halaman membuat post Anda
           );
         },
         tooltip: 'Create Post',
@@ -87,6 +94,8 @@ class CardContainer extends StatelessWidget {
   final String akun;
   final String status;
   final String gambar;
+  final String uid;
+  final String deskripsi;
 
   CardContainer({
     Key? key,
@@ -95,6 +104,8 @@ class CardContainer extends StatelessWidget {
     required this.akun,
     required this.status,
     required this.gambar,
+    required this.uid,
+    required this.deskripsi,
   }) : super(key: key);
 
   @override
@@ -176,7 +187,13 @@ class CardContainer extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SeeMorePage()),
+                              builder: (context) => SeeMorePage(
+                                  jenis: jenis,
+                                  judul: judul,
+                                  status: status,
+                                  deskripsi: deskripsi,
+                                  photoUrl: gambar,
+                                  uid: uid)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
