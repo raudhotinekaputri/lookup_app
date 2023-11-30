@@ -17,9 +17,9 @@ class MyPost extends StatefulWidget {
 }
 
 class _MyPostState extends State<MyPost> {
-  late String username;
-  late String photoURL;
-  late String uid;
+  late String username = "";
+  late String photoURL = "";
+  late String uid = "";
   bool isLoading = true;
 
   @override
