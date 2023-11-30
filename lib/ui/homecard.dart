@@ -18,7 +18,7 @@ class HomeCard extends StatelessWidget {
       body: SafeArea(
           child: Column(
         children: [
-          const SizedBox(height: 96),
+          const SizedBox(height: 8),
           Expanded(
             child: StreamBuilder(
               stream:
