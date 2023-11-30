@@ -313,10 +313,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
             // Implement your onPressed logic here
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => Comment(
-                        pengirim: '',
-                      )),
+              MaterialPageRoute(builder: (context) => CommentPost()),
             );
           },
           foregroundColor: Colors.white,
