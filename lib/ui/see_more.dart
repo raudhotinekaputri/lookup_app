@@ -122,7 +122,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
                 Text(
                   widget.jenis,
                   style: TextStyle(
-                    color: Colors.grey[500],
+                    color: Colors.white,
                   ),
                 ),
               ],
