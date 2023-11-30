@@ -84,7 +84,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:lookup_app/models/post.dart';
+import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -106,16 +108,16 @@ class FireStoreMethods {
           await StorageMethods().uploadImageToStorage('posts', file, true);
       String postId = const Uuid().v1();
       Post post = Post(
-        uid: uid,
-        username: username,
-        datePublished: DateTime.now(),
-        postUrl: photoUrl,
-        judul: judul,
-        jenis: jenis,
-        status: status,
-        deskripsi: deskripsi,
-      );
-      await _firestore.collection('posts').doc(postId).set(post.toJson());
+          uid: uid,
+          username: username,
+          datePublished: DateTime.now(),
+          postUrl: photoUrl,
+          judul: judul,
+          jenis: jenis,
+          status: status,
+          deskripsi: deskripsi,
+          postId: postId);
+      _firestore.collection('posts').doc(postId).set(post.toJson());
       res = "success";
     } catch (err) {
       res = err.toString();
@@ -123,13 +125,77 @@ class FireStoreMethods {
     return res;
   }
 
-  Future<String> postComment(
-    String postId,
-    String text,
-    String uid,
-    String name,
-    String profilePic,
-  ) async {
+  Future<String> updatePost(
+      {Uint8List? file,
+      String? postUrl,
+      required String postId,
+      required String uid,
+      required String username,
+      required String judul,
+      required String status,
+      required String deskripsi,
+      required String jenis}) async {
+    // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
+    String res = "Some error occurred";
+    try {
+      String photoUrl;
+      if (file != null) {
+        photoUrl =
+            await StorageMethods().uploadImageToStorage('posts', file, true);
+      } else {
+        photoUrl = postUrl!;
+      }
+      postUrl = photoUrl;
+      // creates unique id based on time
+      Post post = Post(
+          uid: uid,
+          username: username,
+          datePublished: DateTime.now(),
+          postUrl: photoUrl,
+          judul: judul,
+          jenis: jenis,
+          status: status,
+          deskripsi: deskripsi,
+          postId: postId);
+      _firestore.collection('posts').doc(postId).set(post.toJson());
+      res = "success";
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  Future<String> updateUser({
+    Uint8List? file,
+    required String uid,
+    required String username,
+    required String photoUrl,
+    required String email,
+  }) async {
+    // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
+    String res = "Some error occurred";
+    try {
+      String aphotoUrl;
+      if (file != null) {
+        aphotoUrl = await StorageMethods()
+            .uploadImageToStorage('profilePics', file, false);
+        photoUrl = aphotoUrl;
+      } else {
+        aphotoUrl = photoUrl;
+      }
+
+      // creates unique id based on time
+      await AuthMethods().storeUserData(uid, username, photoUrl, email, "no");
+      res = "success";
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  // Post comment
+  Future<String> postComment(String postId, String text, String uid,
+      String name, String profilePic) async {
     String res = "Some error occurred";
     try {
       if (text.isNotEmpty) {

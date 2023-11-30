@@ -9,6 +9,7 @@ class Post {
   final String uid;
   final DateTime datePublished;
   final String jenis;
+  final String postId;
 
   const Post({
     required this.postUrl,
@@ -19,12 +20,14 @@ class Post {
     required this.status,
     required this.deskripsi,
     required this.jenis,
+    required this.postId,
   });
 
   static Post fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return Post(
+      postId: snapshot["postId"],
       username: snapshot["username"],
       uid: snapshot["uid"],
       postUrl: snapshot["postUrl"],
@@ -37,6 +40,7 @@ class Post {
   }
 
   Map<String, dynamic> toJson() => {
+        "postId": postId,
         "username": username,
         "uid": uid,
         "postUrl": postUrl,
