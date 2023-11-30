@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/ui/createpost.dart';
@@ -8,15 +9,10 @@ import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
   String jenis;
-
   String judul;
-
   String status;
-
   String photoUrl;
-
   String deskripsi;
-
   String uid;
 
   SeeMorePage(
@@ -37,53 +33,56 @@ class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
   late Widget imageSection;
   late Widget profileSection;
-  late String username;
+  late String username = "";
+  late String senderUsername = "";
   late String photoURL;
+  late String senderPhotoUrl = "";
   late Widget textSection;
-  bool isLoadinguser = true;
-  Future<void> getUser() async {
-    final userData = await AuthMethods().getUserData("username");
-    final userPhotoURL = await AuthMethods().getUserData("photoUrl");
-
-    setState(() {
-      username = userData ?? "username";
-      photoURL = userPhotoURL ??
-          "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-      isLoadinguser = false;
-    });
-
-    print(username);
-    print(photoURL);
-  }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: NavTop(),
-      drawer: Sidebar(
-        uid: null,
-      ),
-      bottomNavigationBar: const NavBottom(),
-      body: Container(
-        color: const Color(0xFF212121), // Background color
-        child: SafeArea(
-          child: Column(
-            children: [
-              titleSection,
-              imageSection,
-              profileSection,
-              textSection,
-              commentButton,
-            ],
-          ),
-        ),
-      ),
-    );
+  Future<void> getUser() async {
+    final userName = await AuthMethods().getUserData("username");
+    final userPhotoURL = await AuthMethods().getUserData("photoUrl");
+    final userID = await AuthMethods().getUserData("uid");
+    final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+    senderPhotoUrl =
+        "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    senderUsername = "sender";
+    try {
+      QuerySnapshot querySnapshot =
+          await usersCollection.where("uid", isEqualTo: widget.uid).get();
+
+      if (querySnapshot.size > 0) {
+        DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+        final senderUsernameData = documentSnapshot["username"];
+        final senderPhotoUrlData = documentSnapshot["photoUrl"];
+        setState(() {
+          this.senderUsername = senderUsernameData ?? "username";
+          this.senderPhotoUrl = senderPhotoUrlData ??
+              "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+        });
+
+        print("Sender Username: $senderUsername");
+        print("Sender Photo URL: $senderPhotoUrl");
+      } else {
+        print("No user found with the provided UID");
+      }
+    } catch (error) {
+      print("Error fetching data: $error");
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    getUser();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Call getUser directly in the build method
+
     titleSection = Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -96,7 +95,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
                     widget.judul,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                       color: Colors.grey,
@@ -124,9 +123,12 @@ class _SeeMorePageState extends State<SeeMorePage> {
                     ),
                   );
                 },
-                child: Icon(
-                  Icons.edit,
-                  color: Colors.white,
+                child: const Hero(
+                  tag: 'uniqueTagForEditButton',
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Container(
@@ -137,6 +139,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
         ],
       ),
     );
+
     imageSection = Container(
       padding: const EdgeInsets.all(16),
       child: Image.network(
@@ -146,6 +149,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
         fit: BoxFit.cover,
       ),
     );
+
     profileSection = Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -155,7 +159,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
             children: [
               CircleAvatar(
                 backgroundImage: NetworkImage(
-                  widget.photoUrl,
+                  senderPhotoUrl,
                 ),
                 radius: 15,
               ),
@@ -163,17 +167,13 @@ class _SeeMorePageState extends State<SeeMorePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  isLoadinguser
-                      ? Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : Text(
-                          username,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
+                  Text(
+                    senderUsername,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -199,11 +199,32 @@ class _SeeMorePageState extends State<SeeMorePage> {
         ],
       ),
     );
+
     textSection = Container(
       padding: const EdgeInsets.all(16),
       child: Text(
         widget.deskripsi,
         softWrap: true,
+      ),
+    );
+
+    return Scaffold(
+      appBar: NavTop(),
+      drawer: const Sidebar(uid: null),
+      bottomNavigationBar: const NavBottom(),
+      body: Container(
+        color: const Color(0xFF212121),
+        child: SafeArea(
+          child: Column(
+            children: [
+              titleSection,
+              imageSection,
+              profileSection,
+              textSection,
+              commentButton,
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -218,7 +239,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
         },
         foregroundColor: Colors.white,
         backgroundColor: const Color(0xFF292929),
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         child: const Icon(Icons.comment),
       ),
     ),
