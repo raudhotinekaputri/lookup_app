@@ -293,11 +293,15 @@ class _SeeMorePageState extends State<SeeMorePage> {
       appBar: NavTop(),
       drawer: const Sidebar(),
       bottomNavigationBar: const NavBottom(),
-      body: Container(
-        color: const Color(0xFF212121),
-        child: SafeArea(
-          child: Column(
-            children: [titleSection, imageSection, profileSection, textSection],
+      
+      body: SingleChildScrollView(
+        child: Container(
+          color: const Color(0xFF212121),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [titleSection, imageSection, profileSection, textSection],
+            ),
           ),
         ),
       ),
@@ -305,26 +309,19 @@ class _SeeMorePageState extends State<SeeMorePage> {
   }
 
   Widget commentButton(BuildContext context) {
-    return Container(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: FloatingActionButton(
-          onPressed: () {
-            // Implement your onPressed logic here
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Comment(
-                        pengirim: '',
-                      )),
-            );
-          },
-          foregroundColor: Colors.white,
-          backgroundColor: const Color(0xFF292929),
-          shape: const CircleBorder(),
-          child: const Icon(Icons.comment),
-        ),
-      ),
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Comment(pengirim: ''),
+          ),
+        );
+      },
+      foregroundColor: Colors.white,
+      backgroundColor: const Color(0xFF292929),
+      shape: const CircleBorder(),
+      child: const Icon(Icons.comment),
     );
   }
 }
