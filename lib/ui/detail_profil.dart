@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lookup_app/resources/auth_method.dart';
+import 'package:lookup_app/resources/firestore_method.dart';
 import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/ui/navbottom.dart';
 import 'package:lookup_app/ui/navtop.dart';
@@ -63,10 +67,12 @@ class ProfileEditForm extends StatefulWidget {
 }
 
 class _ProfileEditFormState extends State<ProfileEditForm> {
-
-  late String username = "";
-  late String photoURL;
+  Uint8List? _file;
   bool isLoading = true;
+  late String username = "";
+  late String uid = "";
+  late String photoURL;
+  late String email = "";
 
   final TextEditingController _usernameController = TextEditingController();
 
@@ -92,18 +98,20 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
   Future<void> getUser() async {
     final userData = await AuthMethods().getUserData("username");
     final userPhotoURL = await AuthMethods().getUserData("photoUrl");
+    final userUid = await AuthMethods().getUserData("uid");
+    final userEmail = await AuthMethods().getUserData("email");
 
     setState(() {
+      email = userEmail ?? "email@gmail.com";
+      uid = userUid ?? "uid";
       username = userData ?? "username";
       photoURL = userPhotoURL ??
           "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
       isLoading = false;
     });
-
-    _usernameController.text = username; // Set nilai pada controller
+    _usernameController.text = username;
+    photoURL = userPhotoURL!;
   }
-
-  String _selectedImagePath = ''; // Placeholder for selected image path
 
   @override
   Widget build(BuildContext context) {
@@ -112,28 +120,33 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          GestureDetector(
-            onTap: _selectImage,
-            child: CircleAvatar(
-              radius: 50,
-              backgroundImage: _selectedImagePath.isNotEmpty
-                  ? NetworkImage(photoURL)
-                  : null,
-              child: _selectedImagePath.isEmpty
-                  ? const Icon(Icons.add_a_photo, size: 40, color: Colors.white)
-                  : null,
-            ),
-          ),
-         
+          Stack(children: [
+            _file != null
+                ? CircleAvatar(
+                    radius: 50,
+                    backgroundImage: MemoryImage(_file!),
+                  )
+                : CircleAvatar(
+                    radius: 50,
+                    backgroundImage:
+                        photoURL.isNotEmpty ? NetworkImage(photoURL) : null,
+                  ),
+            Positioned(
+              bottom: -10,
+              left: 80,
+              child: IconButton(
+                onPressed: _selectImage,
+                icon: const Icon(Icons.add_a_photo),
+              ),
+            )
+          ]),
           const SizedBox(height: 16),
           TextFormField(
             controller: _usernameController,
             decoration: InputDecoration(labelText: 'Username'),
           ),
           const SizedBox(height: 16),
-          
           const SizedBox(height: 16),
-          
           const SizedBox(height: 16),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -154,23 +167,37 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
     );
   }
 
-  void _selectImage() {
-    // Implement image selection logic here
-    // For example, you can use the image_picker package
+  Future<void> _selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      _file = im;
+      print(_file);
+    });
   }
 
-  void _saveProfile() {
-    
-    String username = _usernameController.text;
-    
+  void clearImage() {
+    setState(() {
+      _file = null;
+    });
+  }
 
-    // Validate the form
-    if (
-        username.isEmpty) {
-      // Show an error message or handle validation accordingly
-      return;
+  Future<void> _saveProfile() async {
+    isLoading = true;
+    String res;
+    try {
+      res = await FireStoreMethods().updateUser(
+          file: _file,
+          uid: uid,
+          username: _usernameController.text,
+          photoUrl: photoURL,
+          email: email);
+
+      showSnackBar(context, res);
+      isLoading = false;
+    } catch (e) {
+      showSnackBar(context, e.toString());
+      isLoading = false;
     }
-
 
     // Save the profile data or make API calls here
   }

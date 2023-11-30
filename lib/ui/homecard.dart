@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
@@ -91,7 +93,7 @@ class HomeCard extends StatelessWidget {
   }
 }
 
-class CardContainer extends StatelessWidget {
+class CardContainer extends StatefulWidget {
   final String jenis;
   final String judul;
   final String akun;
@@ -112,6 +114,40 @@ class CardContainer extends StatelessWidget {
       required this.deskripsi,
       required this.postId})
       : super(key: key);
+
+  @override
+  State<CardContainer> createState() => _CardContainerState();
+}
+
+class _CardContainerState extends State<CardContainer> {
+  bool isLoading = true;
+  late String username = "";
+  @override
+  @override
+  void initState() {
+    super.initState();
+    initUserData();
+  }
+
+  Future<void> initUserData() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      await getUser();
+    } else {
+      setState(() {
+        username = "username";
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> getUser() async {
+    final userData = await AuthMethods().getUserData("username");
+
+    setState(() {
+      username = userData ?? "username";
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +176,7 @@ class CardContainer extends StatelessWidget {
                       top: 8,
                       right: 8,
                       child: Text(
-                        jenis,
+                        widget.jenis,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
@@ -149,7 +185,7 @@ class CardContainer extends StatelessWidget {
                     ),
                     Center(
                       child: Image.network(
-                        gambar, // Sesuaikan lebar gambar
+                        widget.gambar, // Sesuaikan lebar gambar
                         height: 100, // Sesuaikan tinggi gambar
                         fit: BoxFit.contain,
                       ),
@@ -165,21 +201,21 @@ class CardContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      judul,
+                      widget.judul,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.black,
                       ),
                     ),
                     Text(
-                      akun,
+                      username,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
                       ),
                     ),
                     Text(
-                      status,
+                      widget.status,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.red,
@@ -193,13 +229,13 @@ class CardContainer extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => SeeMorePage(
-                                  jenis: jenis,
-                                  judul: judul,
-                                  status: status,
-                                  deskripsi: deskripsi,
-                                  photoUrl: gambar,
-                                  uid: uid,
-                                  postId: postId)),
+                                  jenis: widget.jenis,
+                                  judul: widget.judul,
+                                  status: widget.status,
+                                  deskripsi: widget.deskripsi,
+                                  photoUrl: widget.gambar,
+                                  uid: widget.uid,
+                                  postId: widget.postId)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
