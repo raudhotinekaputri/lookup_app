@@ -125,6 +125,7 @@ class FireStoreMethods {
             .set({
           'name': name,
           'uid': uid,
+          'profilePic': profilePic,
           'text': text,
           'commentId': commentId,
           'datePublished': DateTime.now(),

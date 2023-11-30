@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CommentCard extends StatelessWidget {
-  final snap;
-  const CommentCard({Key? key, required this.snap}) : super(key: key);
+class CommentCard extends StatefulWidget {
+  String name;
+  String profilePic;
+  String text;
+  DateTime datePublished;
+  CommentCard(
+      {Key? key,
+      required this.name,
+      required this.profilePic,
+      required this.text,
+      required this.datePublished})
+      : super(key: key);
 
+  @override
+  State<CommentCard> createState() => _CommentCardState();
+}
+
+class _CommentCardState extends State<CommentCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -12,9 +26,7 @@ class CommentCard extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(
-              snap.data()['profilePic'],
-            ),
+            backgroundImage: NetworkImage(widget.profilePic),
             radius: 18,
           ),
           Expanded(
@@ -28,13 +40,13 @@ class CommentCard extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                            text: snap.data()['name'],
+                            text: widget.name,
                             style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            )),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black)),
                         TextSpan(
-                          text: ' ${snap.data()['text']}',
-                        ),
+                            text: widget.text,
+                            style: TextStyle(color: Colors.black)),
                       ],
                     ),
                   ),
@@ -42,12 +54,12 @@ class CommentCard extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
                       DateFormat.yMMMd().format(
-                        snap.data()['datePublished'].toDate(),
+                        widget.datePublished,
                       ),
                       style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black),
                     ),
                   )
                 ],

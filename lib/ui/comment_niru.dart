@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/models/user.dart';
 import 'package:lookup_app/providers/user_provider.dart';
+import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/resources/firestore_method.dart';
 import 'package:lookup_app/utils/colors.dart';
 import 'package:lookup_app/utils/utils.dart';
@@ -44,9 +46,44 @@ class _CommentsScreenState extends State<CommentsScreen> {
     }
   }
 
+  bool isLoading = true;
+  late String username = "";
+  late String profilPic = "";
+  late String uid = "";
+  @override
+  @override
+  void initState() {
+    super.initState();
+    initUserData();
+  }
+
+  Future<void> initUserData() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      await getUser();
+    } else {
+      setState(() {
+        username = "username";
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> getUser() async {
+    final userData = await AuthMethods().getUserData('username');
+    final photoUrl = await AuthMethods().getUserData('photoUrl');
+    final userId = await AuthMethods().getUserData('uid');
+
+    setState(() {
+      username = userData ?? "username";
+      profilPic = photoUrl ?? "abc";
+      uid = userId ?? "uid";
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<UserProvider>(context).getUser;
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +110,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (ctx, index) => CommentCard(
-              snap: snapshot.data!.docs[index],
+              name: snapshot.data!.docs[index].data()['name'].toString(),
+              profilePic:
+                  snapshot.data!.docs[index].data()['profilePic'].toString(),
+              text: snapshot.data!.docs[index].data()['text'].toString(),
+              datePublished:
+                  snapshot.data!.docs[index].data()['datePublished'].toDate(),
             ),
           );
         },
@@ -88,7 +130,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(user.photoUrl),
+                backgroundImage: NetworkImage(profilPic),
                 radius: 18,
               ),
               Expanded(
@@ -97,7 +139,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   child: TextField(
                     controller: commentEditingController,
                     decoration: InputDecoration(
-                      hintText: 'Comment as ${user.username}',
+                      hintText: 'Comment as $username',
                       border: InputBorder.none,
                     ),
                   ),
@@ -105,9 +147,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
               ),
               InkWell(
                 onTap: () => postComment(
-                  user.uid,
-                  user.username,
-                  user.photoUrl,
+                  uid,
+                  username,
+                  profilPic,
                 ),
                 child: Container(
                   padding:

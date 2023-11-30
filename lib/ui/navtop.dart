@@ -11,6 +11,7 @@ class NavTop extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Builder(
         builder: (BuildContext context) => AppBar(
+              leading: BackButton(color: Colors.white),
               backgroundColor: Color(0xFF292929),
               actions: const [
                 Padding(

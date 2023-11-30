@@ -4,12 +4,14 @@ import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/resources/firestore_method.dart';
 import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/ui/comment.dart';
+import 'package:lookup_app/ui/comment_niru.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/editpost.dart';
 import 'package:lookup_app/ui/navbottom.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 import 'package:lookup_app/ui/updatepost_niru.dart';
+import 'package:lookup_app/ui/updatepost_niru_copy.dart';
 import 'package:lookup_app/utils/utils.dart';
 
 class SeeMorePage extends StatefulWidget {
@@ -313,7 +315,10 @@ class _SeeMorePageState extends State<SeeMorePage> {
             // Implement your onPressed logic here
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CommentPost()),
+              MaterialPageRoute(
+                  builder: (context) => CommentsScreen(
+                        postId: widget.postId,
+                      )),
             );
           },
           foregroundColor: Colors.white,
