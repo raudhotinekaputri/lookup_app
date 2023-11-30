@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
               );
             }
 
-            return Edit();
+            return EditPosting();
           },
         ),
       ),
