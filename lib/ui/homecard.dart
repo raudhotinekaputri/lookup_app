@@ -54,6 +54,9 @@ class HomeCard extends StatelessWidget {
                         deskripsi: snapshot.data!.docs[index]
                             .data()['deskripsi']
                             .toString(),
+                        postId: snapshot.data!.docs[index]
+                            .data()['postId']
+                            .toString(),
                       ),
                     );
                   },
@@ -96,17 +99,19 @@ class CardContainer extends StatelessWidget {
   final String gambar;
   final String uid;
   final String deskripsi;
+  final String postId;
 
-  CardContainer({
-    Key? key,
-    required this.jenis,
-    required this.judul,
-    required this.akun,
-    required this.status,
-    required this.gambar,
-    required this.uid,
-    required this.deskripsi,
-  }) : super(key: key);
+  CardContainer(
+      {Key? key,
+      required this.jenis,
+      required this.judul,
+      required this.akun,
+      required this.status,
+      required this.gambar,
+      required this.uid,
+      required this.deskripsi,
+      required this.postId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +198,8 @@ class CardContainer extends StatelessWidget {
                                   status: status,
                                   deskripsi: deskripsi,
                                   photoUrl: gambar,
-                                  uid: uid)),
+                                  uid: uid,
+                                  postId: postId)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
