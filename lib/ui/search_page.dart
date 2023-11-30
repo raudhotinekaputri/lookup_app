@@ -80,19 +80,14 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    // Jangan panggil filterItems di initState, karena items masih kosong saat ini
   }
 
   Future<void> searchItems(String query) async {
     try {
-      // Panggil metode searchItems dari StorageMethods
       List<String> searchResults = await StorageMethods().searchItems(query);
 
       setState(() {
-        // Update daftar item dengan hasil pencarian
         items = searchResults;
-
-        // Filter data berdasarkan query
         filterItems(query);
       });
     } catch (e) {
@@ -109,64 +104,62 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return MaterialApp(
-    home: Scaffold(
-      backgroundColor: Color(0xFF212121),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Tambahkan TopBanner di sini
-            TopBanner(),
-            SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 336,
-                height: 56,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search, size: 24),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        onChanged: (query) {
-                          filterItems(query);
-                        },
-                        onSubmitted: (query) {
-                          searchItems(query);
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Cari dan temukan barang Anda',
-                          border: InputBorder.none,
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Color(0xFF212121),
+        body: SafeArea(
+          child: Column(
+            children: [
+              TopBanner(),
+              SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 336,
+                  height: 56,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.search, size: 24),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          onChanged: (query) {
+                            filterItems(query);
+                          },
+                          onSubmitted: (query) {
+                            searchItems(query);
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Cari dan temukan barang Anda',
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredItems.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(filteredItems[index]),
-                  );
-                },
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredItems.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(filteredItems[index]),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        bottomNavigationBar: const NavBottom(),
       ),
-      // Tambahkan bottomNavigationBar di sini
-      bottomNavigationBar: const NavBottom(),
-    ),
-  );
-}
+    );
+  }
 }

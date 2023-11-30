@@ -7,26 +7,21 @@ import 'package:lookup_app/ui/sidebar.dart';
 
 class SeeMorePage extends StatefulWidget {
   String jenis;
-
   String judul;
-
   String status;
-
   String photoUrl;
-
   String deskripsi;
-
   String uid;
 
-  SeeMorePage(
-      {Key? key,
-      required this.jenis,
-      required this.judul,
-      required this.status,
-      required this.photoUrl,
-      required this.deskripsi,
-      required this.uid})
-      : super(key: key);
+  SeeMorePage({
+    Key? key,
+    required this.jenis,
+    required this.judul,
+    required this.status,
+    required this.photoUrl,
+    required this.deskripsi,
+    required this.uid,
+  }) : super(key: key);
 
   @override
   State<SeeMorePage> createState() => _SeeMorePageState();
@@ -36,16 +31,15 @@ class _SeeMorePageState extends State<SeeMorePage> {
   late Widget titleSection;
   late Widget imageSection;
   late Widget profileSection;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavTop(),
-      drawer: Sidebar(
-        uid: null,
-      ),
+      drawer: Sidebar(uid: null),
       bottomNavigationBar: const NavBottom(),
       body: Container(
-        color: const Color(0xFF212121), // Background color
+        color: const Color(0xFF212121),
         child: SafeArea(
           child: Column(
             children: [
@@ -77,6 +71,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
                   child: const Text(
                     'Dicari HP hilang',
                     style: TextStyle(
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                     ),
@@ -85,7 +80,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
                 Text(
                   'Kandersteg, Switzerland',
                   style: TextStyle(
-                    color: Colors.grey[500],
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -145,6 +140,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
                   Text(
                     'Syifa Hadju',
                     style: TextStyle(
+                      color: Colors.white,
                       fontSize: 18,
                     ),
                   ),
@@ -152,41 +148,33 @@ class _SeeMorePageState extends State<SeeMorePage> {
               ),
             ],
           ),
-          DropdownButton<String>(
-            value: 'Sudah Selesai',
-            onChanged: (String? newValue) {},
-            items: <String>['Sudah Selesai', 'Belum Selesai']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color:
-                        value == 'Sudah Selesai' ? Colors.blue : Colors.black,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
+          Text(
+  'Sudah Selesai',
+  style: TextStyle(
+    fontSize: 14,
+    color: Colors.blue, // Atau warna yang diinginkan untuk 'Sudah Selesai'
+  ),
+),
+
         ],
       ),
     );
   }
 
   Widget textSection = Container(
-    padding: const EdgeInsets.all(16),
-    child: const Text(
-      'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
-      'Alps. Situated 1,578 meters above sea level, it is one of the '
-      'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
-      'half-hour walk through pastures and pine forest, leads you to the '
-      'lake, which warms to 20 degrees Celsius in the summer. Activities '
-      'enjoyed here include rowing, and riding the summer toboggan run.',
-      softWrap: true,
-    ),
-  );
+  padding: const EdgeInsets.all(16),
+  child: const Text(
+    'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
+    'Alps. Situated 1,578 meters above sea level, it is one of the '
+    'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
+    'half-hour walk through pastures and pine forest, leads you to the '
+    'lake, which warms to 20 degrees Celsius in the summer. Activities '
+    'enjoyed here include rowing, and riding the summer toboggan run.',
+    softWrap: true,
+    style: TextStyle(color: Colors.white), // Menambahkan style untuk warna teks
+  ),
+);
+
 
   Widget commentButton = Padding(
     padding: const EdgeInsets.only(right: 30.0),
