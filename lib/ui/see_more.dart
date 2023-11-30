@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/resources/auth_method.dart';
+import 'package:lookup_app/resources/firestore_method.dart';
+import 'package:lookup_app/screen/ThePage.dart';
+import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/editpost.dart';
 import 'package:lookup_app/ui/navbottom.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
+import 'package:lookup_app/ui/updatepost_niru.dart';
+import 'package:lookup_app/utils/utils.dart';
 
 class SeeMorePage extends StatefulWidget {
   String jenis;
@@ -14,6 +19,7 @@ class SeeMorePage extends StatefulWidget {
   String photoUrl;
   String deskripsi;
   String uid;
+  String postId;
 
   SeeMorePage(
       {Key? key,
@@ -22,7 +28,8 @@ class SeeMorePage extends StatefulWidget {
       required this.status,
       required this.photoUrl,
       required this.deskripsi,
-      required this.uid})
+      required this.uid,
+      required this.postId})
       : super(key: key);
 
   @override
@@ -38,6 +45,8 @@ class _SeeMorePageState extends State<SeeMorePage> {
   late String photoURL;
   late String senderPhotoUrl = "";
   late Widget textSection;
+  late bool isthesender = false;
+  late String dropdownValue;
 
   @override
   Future<void> getUser() async {
@@ -68,6 +77,9 @@ class _SeeMorePageState extends State<SeeMorePage> {
       } else {
         print("No user found with the provided UID");
       }
+      if (widget.uid == userID) {
+        isthesender = true;
+      }
     } catch (error) {
       print("Error fetching data: $error");
     }
@@ -77,6 +89,9 @@ class _SeeMorePageState extends State<SeeMorePage> {
   void initState() {
     super.initState();
     getUser();
+    dropdownValue = widget.status == "belum" || widget.status == "Belum Selesai"
+        ? "Belum Selesai"
+        : "Sudah Selesai";
   }
 
   @override
@@ -115,25 +130,61 @@ class _SeeMorePageState extends State<SeeMorePage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => EditPost(),
-                    ),
-                  );
-                },
-                child: const Hero(
-                  tag: 'uniqueTagForEditButton',
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              isthesender
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => UpdatePostScreen(
+                              postId: widget.postId,
+                              judul: widget.judul,
+                              deskripsi: widget.deskripsi,
+                              jenis: widget.jenis,
+                              postUrl: widget.photoUrl,
+                              uid: widget.uid,
+                              status: widget.status,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Hero(
+                        tag: 'uniqueTagForEditButton',
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Container(),
               Container(
                 margin: const EdgeInsets.only(top: 4),
               ),
+              isthesender
+                  ? GestureDetector(
+                      onTap: () async {
+                        String res;
+                        try {
+                          res = await FireStoreMethods()
+                              .deletePost(widget.postId);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ThePage(),
+                            ),
+                          );
+                          showSnackBar(context, "Hapus Post Berhasil");
+                        } catch (e) {
+                          showSnackBar(context, "Hapus Post Gagal");
+                        }
+                      },
+                      child: const Hero(
+                        tag: 'uniqueTagForEditButton',
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ],
@@ -164,13 +215,13 @@ class _SeeMorePageState extends State<SeeMorePage> {
                 radius: 15,
               ),
               const SizedBox(width: 8),
-              Column(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     senderUsername,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
@@ -178,24 +229,51 @@ class _SeeMorePageState extends State<SeeMorePage> {
               ),
             ],
           ),
-          DropdownButton<String>(
-            value: 'Sudah Selesai',
-            onChanged: (String? newValue) {},
-            items: <String>['Sudah Selesai', 'Belum Selesai']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color:
-                        value == 'Sudah Selesai' ? Colors.blue : Colors.black,
-                  ),
+          isthesender
+              ? DropdownButton<String>(
+                  value: dropdownValue,
+                  onChanged: (String? newValue) async {
+                    setState(() async {
+                      // Perbarui nilai dropdown saat terjadi perubahan
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('posts')
+                            .doc(widget.postId)
+                            .update({'status': dropdownValue});
+
+                        showSnackBar(context, "Berhasil Edit");
+                        setState(() {
+                          dropdownValue = newValue!;
+                        });
+
+                        print(dropdownValue);
+                      } catch (e) {
+                        showSnackBar(context, e.toString());
+                      }
+
+                      print(dropdownValue);
+                    });
+                  },
+                  items: <String>['Sudah Selesai', 'Belum Selesai']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: value == 'Sudah Selesai'
+                              ? Colors.blue
+                              : Colors.red,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                )
+              : SizedBox(
+                  width: 0,
+                  height: 0,
                 ),
-              );
-            }).toList(),
-          ),
         ],
       ),
     );
@@ -205,10 +283,13 @@ class _SeeMorePageState extends State<SeeMorePage> {
       child: Text(
         widget.deskripsi,
         softWrap: true,
+        style: const TextStyle(color: Colors.white),
       ),
     );
 
     return Scaffold(
+      floatingActionButton: commentButton(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       appBar: NavTop(),
       drawer: const Sidebar(uid: null),
       bottomNavigationBar: const NavBottom(),
@@ -216,32 +297,34 @@ class _SeeMorePageState extends State<SeeMorePage> {
         color: const Color(0xFF212121),
         child: SafeArea(
           child: Column(
-            children: [
-              titleSection,
-              imageSection,
-              profileSection,
-              textSection,
-              commentButton,
-            ],
+            children: [titleSection, imageSection, profileSection, textSection],
           ),
         ),
       ),
     );
   }
 
-  Widget commentButton = Padding(
-    padding: const EdgeInsets.only(right: 30.0),
-    child: Align(
-      alignment: Alignment.centerRight,
-      child: FloatingActionButton(
-        onPressed: () {
-          // Implement your onPressed logic here
-        },
-        foregroundColor: Colors.white,
-        backgroundColor: const Color(0xFF292929),
-        shape: const CircleBorder(),
-        child: const Icon(Icons.comment),
+  Widget commentButton(BuildContext context) {
+    return Container(
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: FloatingActionButton(
+          onPressed: () {
+            // Implement your onPressed logic here
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Comment(
+                        pengirim: '',
+                      )),
+            );
+          },
+          foregroundColor: Colors.white,
+          backgroundColor: const Color(0xFF292929),
+          shape: const CircleBorder(),
+          child: const Icon(Icons.comment),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
