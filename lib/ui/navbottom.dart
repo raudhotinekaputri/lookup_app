@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/ui/homecard.dart';
 import 'package:lookup_app/ui/profile.dart';
 import 'package:lookup_app/ui/search_page.dart';
@@ -35,8 +36,9 @@ class NavBottom extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                Profile()), // Ganti HomePage() dengan halaman yang sesuai
+                            builder: (context) => Profile(
+                                  uid: "",
+                                )), // Ganti HomePage() dengan halaman yang sesuai
                       );
                     },
                   ),
@@ -47,7 +49,7 @@ class NavBottom extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                HomeCard()), // Ganti HomePage() dengan halaman yang sesuai
+                                ThePage()), // Ganti HomePage() dengan halaman yang sesuai
                       );
                     },
                   ),

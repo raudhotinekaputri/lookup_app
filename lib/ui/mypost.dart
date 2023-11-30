@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/ui/createpost.dart';
@@ -8,21 +9,77 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 
-class HomeCard extends StatelessWidget {
-  const HomeCard({super.key});
+class MyPost extends StatefulWidget {
+  const MyPost({super.key});
+
+  @override
+  State<MyPost> createState() => _MyPostState();
+}
+
+class _MyPostState extends State<MyPost> {
+  late String username;
+  late String photoURL;
+  late String uid;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    initUserData();
+  }
+
+  Future<void> initUserData() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      await getUser();
+    } else {
+      setState(() {
+        uid = "";
+        username = "username";
+        photoURL =
+            "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> getUser() async {
+    final userData = await AuthMethods().getUserData("username");
+    final userPhotoURL = await AuthMethods().getUserData("photoUrl");
+    final userId = await AuthMethods().getUserData("uid");
+
+    setState(() {
+      uid = userId ?? "uid";
+      username = userData ?? "username";
+      photoURL = userPhotoURL ??
+          "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+      isLoading = false;
+    });
+
+    print(username);
+    print(photoURL);
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: SafeArea(
           child: Column(
         children: [
           const SizedBox(height: 96),
+          Row(
+            children: [Text("Your Post")],
+          ),
+          Row(
+            children: [Text(username)],
+          ),
           Expanded(
             child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('posts').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .where("uid", isEqualTo: uid.trim())
+                  .snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

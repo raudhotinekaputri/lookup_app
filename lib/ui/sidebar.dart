@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lookup_app/resources/auth_method.dart';
+import 'package:lookup_app/screen/MyPostPage.dart';
 import 'package:lookup_app/ui/login_page.dart';
 import 'package:lookup_app/utils/utils.dart';
 
 class Sidebar extends StatefulWidget {
-  const Sidebar({Key? key, required uid}) : super(key: key);
+  const Sidebar({Key? key}) : super(key: key);
 
   @override
   State<Sidebar> createState() => _SidebarState();
@@ -138,8 +139,13 @@ class _SidebarState extends State<Sidebar> {
               child: ListTile(
                 leading: Icon(Icons.article, color: Colors.white),
                 title: Text('My Post', style: TextStyle(color: Colors.white)),
-                onTap: () {
-                  Navigator.pop(context);
+                onTap: () async {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const MyPostPage(),
+                    ),
+                    (route) => false,
+                  );
                 },
               ),
             ),

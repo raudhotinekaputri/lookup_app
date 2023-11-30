@@ -122,6 +122,12 @@ class AuthMethods {
 
     if (existingData.exists) {
       // Dokumen dengan UID yang sama sudah ada, lakukan pembaruan data
+      await userDocRef.set({
+        'username': userName,
+        'uid': uid,
+        'photoUrl': userPhoto,
+        'email': email,
+      });
     } else {
       // Dokumen dengan UID yang sama belum ada, buat dokumen baru
       await userDocRef.set({
@@ -149,7 +155,7 @@ class AuthMethods {
         String uid = userCredential.user!.uid;
         print('UID pengguna yang login: $uid');
 
-        String userName = gUser!.displayName ?? 'No name';
+        String userName = gUser.displayName ?? 'No name';
         String userPhoto = gUser.photoUrl ?? 'No photo';
         String email = gUser.email;
 
