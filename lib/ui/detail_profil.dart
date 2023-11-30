@@ -69,7 +69,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
   bool isLoading = true;
   late String username = "";
   late String uid = "";
-  late String photoURL;
+  late String photoURL = "";
   late String email = "";
 
   final TextEditingController _usernameController = TextEditingController();

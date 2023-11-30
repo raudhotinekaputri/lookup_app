@@ -101,7 +101,7 @@ class FireStoreMethods {
       }
 
       // creates unique id based on time
-      await AuthMethods().storeUserData(uid, username, photoUrl, email);
+      await AuthMethods().storeUserData(uid, username, photoUrl, email, "no");
       res = "success";
     } catch (err) {
       res = err.toString();

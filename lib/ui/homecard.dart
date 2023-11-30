@@ -141,7 +141,8 @@ class _CardContainerState extends State<CardContainer> {
   }
 
   Future<void> getUser() async {
-    final userData = await AuthMethods().getUserData("username");
+    final userData =
+        await AuthMethods().getUserDataById("username", widget.uid);
 
     setState(() {
       username = userData ?? "username";
