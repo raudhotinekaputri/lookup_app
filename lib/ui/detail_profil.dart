@@ -40,9 +40,7 @@ class ProfilPage extends StatelessWidget {
           // Add other actions if needed
         ],
       ),
-      drawer: Sidebar(
-        uid: null,
-      ),
+      drawer: Sidebar(),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121),

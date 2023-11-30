@@ -291,7 +291,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
       floatingActionButton: commentButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       appBar: NavTop(),
-      drawer: const Sidebar(uid: null),
+      drawer: const Sidebar(),
       bottomNavigationBar: const NavBottom(),
       body: Container(
         color: const Color(0xFF212121),

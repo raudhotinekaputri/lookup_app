@@ -6,8 +6,5 @@ import 'package:lookup_app/ui/profile.dart';
 const webScreenSize = 600;
 
 List<Widget> homeScreenItems = [
-
-  Sidebar(
-    uid: FirebaseAuth.instance.currentUser!.uid,
-  ),
+  Sidebar(),
 ];
