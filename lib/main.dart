@@ -14,6 +14,7 @@ import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/editpost.dart';
+import 'package:lookup_app/ui/login_page.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/signup_page.dart';
 import 'package:lookup_app/ui/splash_screen.dart';
@@ -82,7 +83,7 @@ class MyApp extends StatelessWidget {
               );
             }
 
-            return EditPosting();
+            return LoginPage();
           },
         ),
       ),
