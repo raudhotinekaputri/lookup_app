@@ -11,6 +11,7 @@ import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/sidebar.dart';
 import 'package:lookup_app/ui/updatepost_niru.dart';
+import 'package:lookup_app/ui/updatepost_niru_copy.dart';
 import 'package:lookup_app/utils/utils.dart';
 
 class MyPost extends StatefulWidget {
