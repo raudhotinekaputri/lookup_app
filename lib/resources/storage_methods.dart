@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -28,9 +29,6 @@ class StorageMethods {
     return downloadUrl;
   }
 
-  searchItems(String query) {}
-}
-
 // Jangan dihapus yang atas
 
 // import 'dart:typed_data';
@@ -42,7 +40,8 @@ class StorageMethods {
 // class StorageMethods {
 //   final FirebaseAuth _auth = FirebaseAuth.instance;
 //   final FirebaseStorage _storage = FirebaseStorage.instance;
-//   final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
+  final FirebaseFirestore _firestore =
+      FirebaseFirestore.instance; // Firestore instance
 
 //   Future<String> uploadImageToStorage(
 //       String childName, Uint8List file, bool isPost) async {
@@ -59,25 +58,29 @@ class StorageMethods {
 //     return downloadUrl;
 //   }
 
-//   Future<List<String>> searchItems(String query) async {
-//     try {
-//       // Query Firestore untuk mencari item berdasarkan query
-//       QuerySnapshot<Map<String, dynamic>> querySnapshot =
-//           await _firestore.collection('items').where(
-//                 'name',
-//                 isGreaterThanOrEqualTo: query,
-//                 isLessThan: query + 'z',
-//               ).get();
+  Future<List<Map<String, dynamic>>> searchItems(String query) async {
+    try {
+      // Convert the search query to lowercase for case-insensitive search
+      String lowercaseQuery = query.toLowerCase();
 
-//       List<String> filteredItems = querySnapshot.docs
-//           .map((doc) => doc.data()['name'].toString())
-//           .toList();
+      // Query Firestore to find items containing the query in 'deskripsi' field
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('posts')
+          .where(
+            'deskripsi',
+            arrayContains: lowercaseQuery,
+          )
+          .get();
 
-//       return filteredItems;
-//     } catch (e) {
-//       print("Error searching items: $e");
-//       return [];
-//     }
-//   }
+      List<Map<String, dynamic>> filteredItems =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+
+      return filteredItems;
+    } catch (e) {
+      print("Error searching items: $e");
+      return [];
+    }
+  }
+
 // }
-
+}

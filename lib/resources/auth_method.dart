@@ -50,6 +50,46 @@ class AuthMethods {
     }
   }
 
+  Future<String?> getUserDataById(String ambil, String id) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _firestore.collection('users').doc(id).get();
+      print(documentSnapshot.toString());
+
+      // Access the specified field from the document snapshot
+      Map<String, dynamic>? data =
+          documentSnapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        if (ambil == "username") {
+          String? username = data['username'];
+          return username;
+        } else if (ambil == "photoUrl") {
+          String? photoUrl = data['photoUrl'];
+          return photoUrl;
+        } else if (ambil == "uid") {
+          String? uid = data['uid'];
+          return uid;
+        } else if (ambil == "bio") {
+          String? bio = data['bio'];
+          return bio;
+        } else {
+          String? email =
+              data['email']; // Assuming 'email' is the correct field name
+          return email;
+        }
+      } else {
+        // Handle the case where the data map is null
+        print('Data map is null.');
+        return null; // or return a default value, depending on your use case
+      }
+    } catch (error) {
+      // Handle errors
+      print('Error fetching $ambil: $error');
+      throw error; // You might want to handle this differently in your app
+    }
+  }
+
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
@@ -114,13 +154,13 @@ class AuthMethods {
     return res;
   }
 
-  Future<void> storeUserData(
-      String uid, String userName, String userPhoto, String email) async {
+  Future<void> storeUserData(String uid, String userName, String userPhoto,
+      String email, String google) async {
     final userDocRef = _firestore.collection('users').doc(uid);
 
     final existingData = await userDocRef.get();
 
-    if (existingData.exists) {
+    if (existingData.exists && google != "yes") {
       // Dokumen dengan UID yang sama sudah ada, lakukan pembaruan data
       await userDocRef.set({
         'username': userName,
@@ -128,7 +168,7 @@ class AuthMethods {
         'photoUrl': userPhoto,
         'email': email,
       });
-    } else {
+    } else if (!existingData.exists) {
       // Dokumen dengan UID yang sama belum ada, buat dokumen baru
       await userDocRef.set({
         'username': userName,
@@ -165,7 +205,7 @@ class AuthMethods {
         // Gunakan informasi nama pengguna dan URL foto sesuai kebutuhan
         print('Nama pengguna: $userName');
         print('URL foto: $userPhoto');
-        storeUserData(uid, userName, userPhoto, email);
+        storeUserData(uid, userName, userPhoto, email, 'yes');
 
         return userCredential;
       } else {

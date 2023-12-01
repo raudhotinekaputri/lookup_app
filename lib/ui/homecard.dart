@@ -315,68 +315,58 @@ class _HomeCardState extends State<HomeCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            // const SizedBox(height: 25),
-            // Row(
-            //   children: [
-            //     Text(
-            //       username,
-            //       style: TextStyle(
-            //         fontSize: 16,
-            //         color: Colors.black,
-            //       ),
-            //     )
-            //   ],
-            // ),
-            // Row(
-            //   children: [
-            //     Text(
-            //       "Home Page",
-            //       style: TextStyle(
-            //         fontSize: 25,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     )
-            //   ],
-            // ),
-            const SizedBox(height: 15),
-            Expanded(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('posts').snapshots(),
-                builder: (
-                  context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
-                ) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: CardContainer(
-                          jenis: snapshot.data!.docs[index].data()['jenis'].toString(),
-                          judul: snapshot.data!.docs[index].data()['judul'].toString(),
-                          akun: snapshot.data!.docs[index].data()['username'].toString(),
-                          status: snapshot.data!.docs[index].data()['status'].toString(),
-                          gambar: snapshot.data!.docs[index].data()['postUrl'].toString(),
-                          uid: snapshot.data!.docs[index].data()['uid'].toString(),
-                          deskripsi: snapshot.data!.docs[index].data()['deskripsi'].toString(),
-                          postId: snapshot.data!.docs[index].data()['postId'].toString(),
-                        ),
-                      );
-                    },
+          child: Column(
+        children: [
+          const SizedBox(height: 96),
+          Expanded(
+            child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('posts').snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                },
-              ),
-            )
-          ],
-        ),
-      ),
+                }
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: CardContainer(
+                        jenis: snapshot.data!.docs[index]
+                            .data()['jenis']
+                            .toString(),
+                        judul: snapshot.data!.docs[index]
+                            .data()['judul']
+                            .toString(),
+                        akun: snapshot.data!.docs[index]
+                            .data()['username']
+                            .toString(),
+                        status: snapshot.data!.docs[index]
+                            .data()['status']
+                            .toString(),
+                        gambar: snapshot.data!.docs[index]
+                            .data()['postUrl']
+                            .toString(),
+                        uid:
+                            snapshot.data!.docs[index].data()['uid'].toString(),
+                        deskripsi: snapshot.data!.docs[index]
+                            .data()['deskripsi']
+                            .toString(),
+                        postId: snapshot.data!.docs[index]
+                            .data()['postId']
+                            .toString(),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          )
+        ],
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -440,7 +430,8 @@ class _CardContainerState extends State<CardContainer> {
   }
 
   Future<void> getUser() async {
-    final userData = await AuthMethods().getUserData("username");
+    final userData =
+        await AuthMethods().getUserDataById("username", widget.uid);
 
     setState(() {
       username = userData ?? "username";

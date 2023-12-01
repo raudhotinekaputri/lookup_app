@@ -12,7 +12,7 @@ import 'package:lookup_app/utils/utils.dart';
 import 'package:lookup_app/widgets/text_field_input.dart';
 import 'package:provider/provider.dart';
 
-class UpdatePostScreen extends StatefulWidget {
+class UpdatePostScreen2 extends StatefulWidget {
   String jenis;
   String judul;
   String postUrl;
@@ -20,7 +20,7 @@ class UpdatePostScreen extends StatefulWidget {
   String uid;
   String postId;
   String status;
-  UpdatePostScreen(
+  UpdatePostScreen2(
       {Key? key,
       required this.jenis,
       required this.judul,
@@ -32,10 +32,10 @@ class UpdatePostScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _UpdatePostScreenState createState() => _UpdatePostScreenState();
+  _UpdatePostScreen2State createState() => _UpdatePostScreen2State();
 }
 
-class _UpdatePostScreenState extends State<UpdatePostScreen> {
+class _UpdatePostScreen2State extends State<UpdatePostScreen2> {
   Uint8List? _file;
   bool isLoading = false;
   final TextEditingController _deskripsiPostController =

@@ -98,7 +98,7 @@ class _SidebarState extends State<Sidebar> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      this.username,
+                                      this.username.substring(0, 10),
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,

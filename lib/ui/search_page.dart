@@ -1,71 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:lookup_app/resources/storage_methods.dart';
+import 'package:lookup_app/ui/homecard.dart';
 import 'package:lookup_app/ui/navbottom.dart';
 
-Widget TopBanner() {
-  return Column(
-    children: [
-      Container(
-        width: 393,
-        height: 123,
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              child: Container(
-                width: 390,
-                height: 126,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("search.png"),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 27,
-              top: 25,
-              child: Container(
-                width: 390,
-                height: 126,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'LookUp',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 32,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ),
-                    Text(
-                      'Cari dan temukan barang Anda',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFFC9C9C9),
-                        fontSize: 16,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SearchPage(),
+    );
+  }
 }
 
 class SearchPage extends StatefulWidget {
@@ -74,25 +22,21 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<String> items = [];
-  List<String> filteredItems = [];
+  List<Map<String, dynamic>> items = [];
+  List<Map<String, dynamic>> filteredItems = [];
 
   @override
   void initState() {
     super.initState();
-    // Jangan panggil filterItems di initState, karena items masih kosong saat ini
   }
 
   Future<void> searchItems(String query) async {
     try {
-      // Panggil metode searchItems dari StorageMethods
-      List<String> searchResults = await StorageMethods().searchItems(query);
-
+      List<Map<String, dynamic>> searchResults =
+          await StorageMethods().searchItems(query);
+      print("Search Results: $searchResults");
       setState(() {
-        // Update daftar item dengan hasil pencarian
         items = searchResults;
-
-        // Filter data berdasarkan query
         filterItems(query);
       });
     } catch (e) {
@@ -102,21 +46,25 @@ class _SearchPageState extends State<SearchPage> {
 
   void filterItems(String query) {
     setState(() {
-      filteredItems = items
-          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      if (query.isEmpty) {
+        filteredItems = items;
+      } else {
+        filteredItems = items
+            .where((item) =>
+                item['judul'].toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
     });
   }
 
   @override
-Widget build(BuildContext context) {
-  return MaterialApp(
-    home: Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
       backgroundColor: Color(0xFF212121),
       body: SafeArea(
         child: Column(
           children: [
-            // Tambahkan TopBanner di sini
+            // Add TopBanner here
             TopBanner(),
             SizedBox(height: 16),
             Padding(
@@ -124,7 +72,8 @@ Widget build(BuildContext context) {
               child: Container(
                 width: 336,
                 height: 56,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -155,8 +104,18 @@ Widget build(BuildContext context) {
               child: ListView.builder(
                 itemCount: filteredItems.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(filteredItems[index]),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: CardContainer(
+                      jenis: filteredItems[index]['jenis'].toString(),
+                      judul: filteredItems[index]['judul'].toString(),
+                      akun: filteredItems[index]['username'].toString(),
+                      status: filteredItems[index]['status'].toString(),
+                      gambar: filteredItems[index]['postUrl'].toString(),
+                      uid: filteredItems[index]['uid'].toString(),
+                      deskripsi: filteredItems[index]['deskripsi'].toString(),
+                      postId: filteredItems[index]['postId'].toString(),
+                    ),
                   );
                 },
               ),
@@ -164,9 +123,73 @@ Widget build(BuildContext context) {
           ],
         ),
       ),
-      // Tambahkan bottomNavigationBar di sini
       bottomNavigationBar: const NavBottom(),
-    ),
-  );
-}
+    );
+  }
+
+  Widget TopBanner() {
+    return Column(
+      children: [
+        Container(
+          width: 393,
+          height: 123,
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0,
+                top: 0,
+                child: Container(
+                  width: 390,
+                  height: 126,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/search.png"),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 27,
+                top: 25,
+                child: Container(
+                  width: 390,
+                  height: 126,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'LookUp',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          height: 0,
+                        ),
+                      ),
+                      Text(
+                        'Cari dan temukan barang Anda',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFFC9C9C9),
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }

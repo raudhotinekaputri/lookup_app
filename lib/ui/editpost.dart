@@ -79,11 +79,11 @@ class _EditPostState extends State<EditPost> {
                       color: Colors.white), // Menggunakan ikon panah ke kiri
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                HomeCard()), // Ganti HomePage() dengan halaman yang sesuai
-                      );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomeCard()), // Ganti HomePage() dengan halaman yang sesuai
+                    );
                   },
                 ),
               ),
