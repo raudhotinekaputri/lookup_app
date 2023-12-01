@@ -75,39 +75,11 @@ class _MyPostState extends State<MyPost> {
         children: [
           const SizedBox(height: 25),
           Row(
-            children: [
-              Text(
-                username,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-                )
-            ],
+            children: [Text("Your Post")],
           ),
           Row(
-            children: [
-              Text(
-                "Your Post",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            ],
+            children: [Text(username)],
           ),
-          const SizedBox(height: 15),
-          // Row(
-          //   children: [
-          //     Text(
-          //       username,
-          //       style: TextStyle(
-          //         fontSize: 16,
-          //         color: Colors.black,
-          //       ),
-          //       )
-          //   ],
-          // ),
           Expanded(
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -195,18 +167,17 @@ class CardContainer extends StatefulWidget {
   final String postId;
   final String postURL;
 
-  CardContainer({
-    Key? key,
-    required this.jenis,
-    required this.judul,
-    required this.akun,
-    required this.status,
-    required this.gambar,
-    required this.uid,
-    required this.deskripsi,
-    required this.postId,
-    required this.postURL,
-  }) : super(key: key);
+  CardContainer(
+      {Key? key,
+      required this.jenis,
+      required this.judul,
+      required this.akun,
+      required this.status,
+      required this.gambar,
+      required this.uid,
+      required this.deskripsi,
+      required this.postId})
+      : super(key: key);
 
   @override
   State<CardContainer> createState() => _CardContainerState();
@@ -232,7 +203,8 @@ class _CardContainerState extends State<CardContainer> {
   }
 
   Future<void> getUser() async {
-    final userData = await AuthMethods().getUserData("username");
+    final userData =
+        await AuthMethods().getUserDataById("username", widget.uid);
 
     setState(() {
       username = userData ?? "username";
@@ -241,153 +213,112 @@ class _CardContainerState extends State<CardContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        elevation: 5.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-              child: Image.network(
-                widget.gambar,
-                fit: BoxFit.cover,
-                height: 200,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.judul,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(Icons.account_circle, size: 16, color: Colors.grey),
-                      SizedBox(width: 4),
-                      Text(
-                        username,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(Icons.info, size: 16, color: Colors.red),
-                      SizedBox(width: 4),
-                      Text(
-                        widget.status,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    widget.deskripsi,
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                  SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SeeMorePage(
-                            jenis: widget.jenis,
-                            judul: widget.judul,
-                            status: widget.status,
-                            deskripsi: widget.deskripsi,
-                            photoUrl: widget.gambar,
-                            uid: widget.uid,
-                            postId: widget.postId,
-                          ),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF8C92B6),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      child: Center(
-                        child: Text('Lihat'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => UpdatePostScreen(
-                          postId: widget.postId,
-                          judul: widget.judul,
-                          deskripsi: widget.deskripsi,
-                          jenis: widget.jenis,
-                          postUrl: widget.postURL,
-                          uid: widget.uid,
-                          status: widget.status,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    color: Colors.red,
-                  ),
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Card(
+          elevation: 5.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Stack(
+            children: [
+              Container(
+                width: 300,
+                height: 400,
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  color: Colors.white,
+                  border: Border.all(color: Colors.white),
                 ),
-                IconButton(
-                  onPressed: () async {
-                    String res;
-                    try {
-                      res = await FireStoreMethods().deletePost(widget.postId);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ThePage(),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Text(
+                        widget.jenis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
                         ),
-                      );
-                      showSnackBar(context, "Hapus Post Berhasil");
-                    } catch (e) {
-                      showSnackBar(context, "Hapus Post Gagal");
-                    }
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
+                      ),
+                    ),
+                    Center(
+                      child: Image.network(
+                        widget.gambar, // Sesuaikan lebar gambar
+                        height: 100, // Sesuaikan tinggi gambar
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
+              ),
+              Positioned(
+                bottom: 16,
+                left: 16,
+                right: 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.judul,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      username,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
+                      widget.status,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Lakukan sesuatu saat tombol ditekan
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SeeMorePage(
+                                  jenis: widget.jenis,
+                                  judul: widget.judul,
+                                  status: widget.status,
+                                  deskripsi: widget.deskripsi,
+                                  photoUrl: widget.gambar,
+                                  uid: widget.uid,
+                                  postId: widget.postId)),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(
+                            0xFF8C92B6), // Ganti warna latar belakang sesuai keinginan Anda
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        child: Center(
+                          child: Text('Lihat'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

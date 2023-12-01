@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lookup_app/ui/addpost_niru.dart';
+import 'package:lookup_app/ui/addpost_niru_copy.dart';
 import 'package:lookup_app/ui/homecard.dart';
 import 'package:lookup_app/ui/mypost.dart';
 import 'package:lookup_app/ui/navbottom.dart';
