@@ -13,7 +13,6 @@ import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
 import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/createpost.dart';
-import 'package:lookup_app/ui/editpost.dart';
 import 'package:lookup_app/ui/login_page.dart';
 import 'package:lookup_app/ui/see_more.dart';
 import 'package:lookup_app/ui/signup_page.dart';
@@ -60,7 +59,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Instagram Clone',
+        title: 'LookUp App',
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
@@ -83,7 +82,7 @@ class MyApp extends StatelessWidget {
               );
             }
 
-            return EditPosting();
+            return SplashScreenPage();
           },
         ),
       ),
