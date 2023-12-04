@@ -10,7 +10,7 @@ class SignUpPage extends StatelessWidget {
         body: SafeArea(
       child: Column(
         children: <Widget>[
-          SizedBox(height: 96),
+          SizedBox(height: 40),
           CardSignUp(),
         ],
       ),
