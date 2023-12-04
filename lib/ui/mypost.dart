@@ -67,12 +67,28 @@ class _MyPostState extends State<MyPost> {
       body: SafeArea(
           child: Column(
         children: [
-          const SizedBox(height: 96),
+          const SizedBox(height: 25),
           Row(
-            children: [Text("Your Post")],
+            children: [
+              Text(
+                username,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              )
+            ],
           ),
           Row(
-            children: [Text(username)],
+            children: [
+              Text(
+                "Your Post",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
           ),
           Expanded(
             child: StreamBuilder(
@@ -160,26 +176,25 @@ class CardContainer extends StatefulWidget {
   final String deskripsi;
   final String postId;
 
-  CardContainer(
-      {Key? key,
-      required this.jenis,
-      required this.judul,
-      required this.akun,
-      required this.status,
-      required this.gambar,
-      required this.uid,
-      required this.deskripsi,
-      required this.postId})
-      : super(key: key);
+  CardContainer({
+    Key? key,
+    required this.jenis,
+    required this.judul,
+    required this.akun,
+    required this.status,
+    required this.gambar,
+    required this.uid,
+    required this.deskripsi,
+    required this.postId,
+  }) : super(key: key);
 
   @override
   State<CardContainer> createState() => _CardContainerState();
 }
 
 class _CardContainerState extends State<CardContainer> {
-  bool isLoading = true;
   late String username = "";
-  @override
+
   @override
   void initState() {
     super.initState();
@@ -192,128 +207,122 @@ class _CardContainerState extends State<CardContainer> {
     } else {
       setState(() {
         username = "username";
-        isLoading = false;
       });
     }
   }
 
   Future<void> getUser() async {
-    final userData = await AuthMethods().getUserData("username");
+    final userData =
+        await AuthMethods().getUserDataById("username", widget.uid);
 
     setState(() {
       username = userData ?? "username";
-      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Card(
-          elevation: 5.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Stack(
-            children: [
-              Container(
-                width: 300,
-                height: 400,
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white),
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Text(
-                        widget.jenis,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              child: Image.network(
+                widget.gambar,
+                fit: BoxFit.cover,
+                height: 200,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.judul,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.account_circle, size: 16, color: Colors.grey),
+                      SizedBox(width: 4),
+                      Text(
+                        username,
                         style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 14,
+                          color: Colors.grey,
                         ),
                       ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.info, size: 16, color: Colors.red),
+                      SizedBox(width: 4),
+                      Text(
+                        widget.status,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    widget.deskripsi,
+                    style: TextStyle(
+                      fontSize: 14,
                     ),
-                    Center(
-                      child: Image.network(
-                        widget.gambar, // Sesuaikan lebar gambar
-                        height: 100, // Sesuaikan tinggi gambar
-                        fit: BoxFit.contain,
+                  ),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SeeMorePage(
+                            jenis: widget.jenis,
+                            judul: widget.judul,
+                            status: widget.status,
+                            deskripsi: widget.deskripsi,
+                            photoUrl: widget.gambar,
+                            uid: widget.uid,
+                            postId: widget.postId,
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFF8C92B6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ],
-                ),
+                    child: Container(
+                      width: double.infinity,
+                      child: Center(
+                        child: Text('Lihat'),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                bottom: 16,
-                left: 16,
-                right: 16,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.judul,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      username,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Text(
-                      widget.status,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.red,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Lakukan sesuatu saat tombol ditekan
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SeeMorePage(
-                                  jenis: widget.jenis,
-                                  judul: widget.judul,
-                                  status: widget.status,
-                                  deskripsi: widget.deskripsi,
-                                  photoUrl: widget.gambar,
-                                  uid: widget.uid,
-                                  postId: widget.postId)),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(
-                            0xFF8C92B6), // Ganti warna latar belakang sesuai keinginan Anda
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        child: Center(
-                          child: Text('Lihat'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

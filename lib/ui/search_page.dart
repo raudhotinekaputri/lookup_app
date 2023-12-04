@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lookup_app/resources/storage_methods.dart';
 import 'package:lookup_app/ui/homecard.dart';
 import 'package:lookup_app/ui/navbottom.dart';
@@ -22,8 +23,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<Map<String, dynamic>> items = [];
-  List<Map<String, dynamic>> filteredItems = [];
+  List<Map<String, dynamic>?> items = [];
+  List<Map<String, dynamic>?> filteredItems = [];
+  final TextEditingController _searchController = TextEditingController();
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -32,11 +36,20 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> searchItems(String query) async {
     try {
-      List<Map<String, dynamic>> searchResults =
-          await StorageMethods().searchItems(query);
-      print("Search Results: $searchResults");
+      String lowercaseQuery = query.toLowerCase();
+
+      QuerySnapshot<Map<String, dynamic>?> searchResults = await _firestore
+          .collection('posts')
+          .where('deskripsi', arrayContains: lowercaseQuery)
+          .get();
+
+      List<Map<String, dynamic>?> results = searchResults.docs
+          .map((DocumentSnapshot<Map<String, dynamic>?> document) =>
+              document.data())
+          .toList();
+
       setState(() {
-        items = searchResults;
+        items = results;
         filterItems(query);
       });
     } catch (e) {
@@ -51,7 +64,7 @@ class _SearchPageState extends State<SearchPage> {
       } else {
         filteredItems = items
             .where((item) =>
-                item['judul'].toLowerCase().contains(query.toLowerCase()))
+                item?['judul']?.toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
     });
@@ -84,10 +97,8 @@ class _SearchPageState extends State<SearchPage> {
                     SizedBox(width: 8),
                     Expanded(
                       child: TextField(
+                        controller: _searchController,
                         onChanged: (query) {
-                          filterItems(query);
-                        },
-                        onSubmitted: (query) {
                           searchItems(query);
                         },
                         decoration: InputDecoration(
@@ -101,22 +112,43 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredItems.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: CardContainer(
-                      jenis: filteredItems[index]['jenis'].toString(),
-                      judul: filteredItems[index]['judul'].toString(),
-                      akun: filteredItems[index]['username'].toString(),
-                      status: filteredItems[index]['status'].toString(),
-                      gambar: filteredItems[index]['postUrl'].toString(),
-                      uid: filteredItems[index]['uid'].toString(),
-                      deskripsi: filteredItems[index]['deskripsi'].toString(),
-                      postId: filteredItems[index]['postId'].toString(),
-                    ),
-                  );
+              child: FutureBuilder<void>(
+                future: Future.delayed(Duration(seconds: 3)),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else {
+                    return ListView.builder(
+                      itemCount: filteredItems.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: CardContainer(
+                            jenis: filteredItems[index]?['jenis']?.toString() ??
+                                '',
+                            judul: filteredItems[index]?['judul']?.toString() ??
+                                '',
+                            akun:
+                                filteredItems[index]?['username']?.toString() ??
+                                    '',
+                            status:
+                                filteredItems[index]?['status']?.toString() ??
+                                    '',
+                            gambar:
+                                filteredItems[index]?['postUrl']?.toString() ??
+                                    '',
+                            uid: filteredItems[index]?['uid']?.toString() ?? '',
+                            deskripsi: filteredItems[index]?['deskripsi']
+                                    ?.toString() ??
+                                '',
+                            postId:
+                                filteredItems[index]?['postId']?.toString() ??
+                                    '',
+                          ),
+                        );
+                      },
+                    );
+                  }
                 },
               ),
             ),

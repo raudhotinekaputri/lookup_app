@@ -11,14 +11,14 @@ import 'package:lookup_app/utils/utils.dart';
 import 'package:lookup_app/widgets/text_field_input.dart';
 import 'package:provider/provider.dart';
 
-class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
+class AddPostScreen2 extends StatefulWidget {
+  const AddPostScreen2({Key? key}) : super(key: key);
 
   @override
-  _AddPostScreenState createState() => _AddPostScreenState();
+  _AddPostScreen2State createState() => _AddPostScreen2State();
 }
 
-class _AddPostScreenState extends State<AddPostScreen> {
+class _AddPostScreen2State extends State<AddPostScreen2> {
   Uint8List? _file;
   bool isLoading = false;
   final TextEditingController _deskripsiPostController =
