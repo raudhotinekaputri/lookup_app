@@ -98,8 +98,8 @@ class _SidebarState extends State<Sidebar> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      this.username.substring(0, 10),
-                                      style: TextStyle(
+                                     this.username.length > 10 ? this.username.substring(0, 10) : this.username,
+  style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -124,16 +124,16 @@ class _SidebarState extends State<Sidebar> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 55.0), // Adjust left padding
-              child: ListTile(
-                leading: Icon(Icons.person, color: Colors.white),
-                title: Text('Profil', style: TextStyle(color: Colors.white)),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 55.0), // Adjust left padding
+            //   child: ListTile(
+            //     leading: Icon(Icons.person, color: Colors.white),
+            //     title: Text('Profil', style: TextStyle(color: Colors.white)),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //     },
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.only(left: 55.0), // Adjust left padding
               child: ListTile(

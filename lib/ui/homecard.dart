@@ -1,24 +1,58 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:lookup_app/resources/auth_method.dart';
 import 'package:lookup_app/ui/createpost.dart';
-import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/see_more.dart';
-import 'package:lookup_app/ui/sidebar.dart';
 
-class HomeCard extends StatelessWidget {
-  const HomeCard({super.key});
+class HomeCard extends StatefulWidget {
+  const HomeCard({Key? key}) : super(key: key);
+
+  @override
+  _HomeCardState createState() => _HomeCardState();
+}
+
+class _HomeCardState extends State<HomeCard> {
+  // late String username;
+  // late String uid;
+  // bool isLoading = true;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initUserData();
+  // }
+
+  // Future<void> initUserData() async {
+  //   if (FirebaseAuth.instance.currentUser != null) {
+  //     await getUser();
+  //   } else {
+  //     setState(() {
+  //       uid = "";
+  //       username = "username";
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
+
+  // Future<void> getUser() async {
+  //   final userData = await AuthMethods().getUserData("username");
+  //   final userId = await AuthMethods().getUserData("uid");
+
+  //   setState(() {
+  //     uid = userId ?? "uid";
+  //     username = userData ?? "username";
+  //     isLoading = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
           child: Column(
         children: [
-          const SizedBox(height: 8),
+          //const SizedBox(height: 50),
           Expanded(
             child: StreamBuilder(
               stream:
@@ -73,22 +107,14 @@ class HomeCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    CreatePost()), // Ganti dengan halaman membuat post Anda
+              builder: (context) => CreatePost(),
+            ),
           );
         },
         tooltip: 'Create Post',
         backgroundColor: Colors.white,
         child: Icon(Icons.add, color: Colors.black),
       ),
-      // body: SafeArea(
-      //   child: Column(children: [
-      //     SizedBox(height: 96),
-      //     Padding(padding:EdgeInsets.symmetric(vertical: 10), child:CardContainer() ,),
-      //     SizedBox(height: 16.0),
-      //       CardContainer(),
-      //   ],)
-      // ),
     );
   }
 }

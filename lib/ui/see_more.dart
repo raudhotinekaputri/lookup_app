@@ -6,7 +6,7 @@ import 'package:lookup_app/screen/ThePage.dart';
 import 'package:lookup_app/ui/comment.dart';
 import 'package:lookup_app/ui/comment_niru.dart';
 import 'package:lookup_app/ui/createpost.dart';
-import 'package:lookup_app/ui/editpost.dart';
+
 import 'package:lookup_app/ui/navbottom.dart';
 import 'package:lookup_app/ui/navtop.dart';
 import 'package:lookup_app/ui/sidebar.dart';
@@ -295,38 +295,61 @@ class _SeeMorePageState extends State<SeeMorePage> {
       appBar: NavTop(),
       drawer: const Sidebar(),
       bottomNavigationBar: const NavBottom(),
-      body: Container(
-        color: const Color(0xFF212121),
-        child: SafeArea(
-          child: Column(
-            children: [titleSection, imageSection, profileSection, textSection],
+      
+      body: SingleChildScrollView(
+        child: Container(
+          color: const Color(0xFF212121),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [titleSection, imageSection, profileSection, textSection],
+            ),
           ),
         ),
       ),
     );
+    
   }
 
-  Widget commentButton(BuildContext context) {
-    return Container(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: FloatingActionButton(
-          onPressed: () {
-            // Implement your onPressed logic here
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CommentsScreen(
-                        postId: widget.postId,
-                      )),
-            );
-          },
-          foregroundColor: Colors.white,
-          backgroundColor: const Color(0xFF292929),
-          shape: const CircleBorder(),
-          child: const Icon(Icons.comment),
-        ),
-      ),
+//   Widget commentButton(BuildContext context) {
+//     return Container(
+//       child: Align(
+//         alignment: Alignment.centerRight,
+//         child: FloatingActionButton(
+//           onPressed: () {
+//             // Implement your onPressed logic here
+//             Navigator.push(
+//               context,
+//               MaterialPageRoute(
+//                   builder: (context) => Comment(
+//                         pengirim: '',
+//                       )),
+//             );
+//           },
+//           foregroundColor: Colors.white,
+//           backgroundColor: const Color(0xFF292929),
+//           shape: const CircleBorder(),
+//           child: const Icon(Icons.comment),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+Widget commentButton(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Comment(pengirim: ''),
+          ),
+        );
+      },
+      foregroundColor: Colors.white,
+      backgroundColor: const Color(0xFF292929),
+      shape: const CircleBorder(),
+      child: const Icon(Icons.comment),
     );
   }
 }
